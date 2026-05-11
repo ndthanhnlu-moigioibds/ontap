@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Ôn Tập & Thi Trắc Nghiệm</title>
+    <style>
+        :root { --primary: #1976d2; --active: #2196f3; --answered: #9c27b0; --success: #2e7d32; --error: #d32f2f; --warning: #ff9800; --bg-light: #f5f5f5; --border: #ddd; }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #e9ecef; display: flex; height: 100vh; overflow: hidden; }
+        .container { display: flex; width: 100%; max-width: 1400px; margin: auto; height: 95vh; background: #fff; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .left-panel { flex: 7; display: flex; flex-direction: column; border-right: 2px solid var(--border); padding: 20px; position: relative; }
+        .right-panel { flex: 3; display: flex; flex-direction: column; padding: 10px; background: #fafafa; }
+        .header { border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 15px; }
+        .header h2 { margin: 0; color: #333; }
+        .header h4 { margin: 5px 0 0 0; color: #666; font-weight: normal; }
+        .question-content { flex: 1; overflow-y: auto; font-size: 1.1em; line-height: 1.6; padding-right: 10px; }
+        .question-title { font-weight: bold; color: var(--error); margin-bottom: 15px; font-size: 1.2em; }
+        .options label { display: block; padding: 12px 15px; margin-bottom: 10px; background: var(--bg-light); border: 1px solid var(--border); border-radius: 5px; cursor: pointer; transition: 0.2s; }
+        .options label:hover { background: #e3f2fd; }
+        .options input { margin-right: 10px; transform: scale(1.2); }
+        .explanation-box { display: none; margin-top: 20px; padding: 15px; border-radius: 5px; background-color: #e8f5e9; border-left: 4px solid var(--success); font-size: 0.95em; }
+        .navigation { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; padding-top: 15px; border-top: 1px solid var(--border); }
+        .nav-btn { padding: 10px 15px; background: var(--warning); color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 0.95em; }
+        .nav-btn:hover { background: #f57c00; }
+        .nav-btn:disabled { background: #ccc; cursor: not-allowed; }
+        .btn-explain { background: #17a2b8; } .btn-explain:hover { background: #138496; }
+        .sheet-header { text-align: center; margin-bottom: 10px; font-weight: bold; color: var(--primary); font-size: 1.1em;}
+        .sheet-table-container { flex: 1; overflow-y: auto; margin-bottom: 10px; border: 1px solid var(--border);}
+        table { width: 100%; border-collapse: collapse; text-align: center; font-size: 0.9em; }
+        th, td { border: 1px solid var(--border); padding: 5px; }
+        th { background: var(--primary); color: white; position: sticky; top: 0; z-index: 1;}
+        .row-item { cursor: pointer; background: #fff; transition: 0.2s; }
+        .row-item:hover { background: #e0e0e0; }
+        .row-active { background: #e3f2fd !important; border-left: 4px solid var(--primary); }
+        .row-active td:first-child { font-weight: bold; color: var(--primary); }
+        .cell-opt { width: 25px; height: 25px; display: inline-block; border: 1px solid #aaa; border-radius: 3px; line-height: 25px; color: transparent; font-size: 0.8em;}
+        .cell-answered { background-color: var(--answered); color: white; border-color: var(--answered); }
+        .action-group { display: flex; flex-direction: column; gap: 8px; }
+        .summary-btn { padding: 12px; background: var(--success); color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .summary-btn:hover { background: #1b5e20; }
+        .export-btn { padding: 12px; background: var(--primary); color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .export-btn:hover { background: #1565c0; }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); }
+        .modal-content { background-color: #fff; margin: 10% auto; padding: 20px 30px; border: 1px solid #888; width: 80%; max-width: 500px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close:hover { color: black; }
+        .stat-box { display: flex; justify-content: space-between; margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;}
+        .stat-item { text-align: center; }
+        .stat-num { font-size: 2em; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="left-panel">
+        <div class="header">
+            <h2>{{QUIZ_TITLE}}</h2>
+            <h4>{{QUIZ_SUBTITLE}}</h4>
+        </div>
+        
+        <div class="question-content">
+            <div id="q-content"></div>
+            <div id="explanation-box" class="explanation-box"></div>
+        </div>
+
+        <div class="navigation" id="nav-bar">
+            <button class="nav-btn" onclick="jumpTo(0)" id="btn-first">|&lt; Đầu</button>
+            <button class="nav-btn" onclick="prev()" id="btn-prev">&lt; Trở lại</button>
+            <button class="nav-btn btn-explain" onclick="showExplanation()" title="Xem đáp án và giải thích">💡 Giải đáp</button>
+            <button class="nav-btn" onclick="next()" id="btn-next">Tiếp tục &gt;</button>
+            <button class="nav-btn" onclick="jumpTo(TOTAL_QUESTIONS - 1)" id="btn-last">Cuối &gt;|</button>
+        </div>
+    </div>
+
+    <div class="right-panel">
+        <div class="sheet-header">PHIẾU TRẢ LỜI</div>
+        <div class="sheet-table-container">
+            <table id="answer-sheet">
+                <thead><tr><th>Câu</th><th>A</th><th>B</th><th>C</th><th>D</th></tr></thead>
+                <tbody id="sheet-body"></tbody>
+            </table>
+        </div>
+        
+        <div class="action-group">
+            <button class="summary-btn" onclick="showSummary()">📊 Kiểm tra tổng hợp</button>
+            <button class="export-btn" onclick="exportExcel()">💾 Nộp bài & Xuất Excel</button>
+        </div>
+    </div>
+</div>
+
+<div id="summaryModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeSummary()">&times;</span>
+        <h2 style="color: var(--primary); text-align: center; margin-top: 0;">Kết Quả Ôn Tập</h2>
+        <div id="summary-details" style="font-size: 1.1em; line-height: 1.8;"></div>
+        <div class="stat-box">
+            <div class="stat-item"><div class="stat-num" style="color: var(--success);" id="stat-correct">0</div><div>Đúng</div></div>
+            <div class="stat-item"><div class="stat-num" style="color: var(--error);" id="stat-wrong">0</div><div>Sai</div></div>
+            <div class="stat-item"><div class="stat-num" style="color: var(--warning);" id="stat-unanswered">0</div><div>Chưa làm</div></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const rawData = {{QUIZ_DATA}};
+    let TOTAL_QUESTIONS = 0;
+    let quizData = [];
+    let userAnswers = [];
+    let currentIndex = 0;
+
+    window.onload = function() {
+        // KIỂM TRA LỖI RỖNG DỮ LIỆU
+        if (!rawData || rawData.length === 0) {
+            document.getElementById("q-content").innerHTML = `
+                <h3 style='color:red;'>⚠️ Hệ thống không tìm thấy câu hỏi!</h3>
+                <p>Quá trình tạo file gặp lỗi do file Word không đúng chuẩn định dạng. Vui lòng:</p>
+                <ul>
+                    <li>Mở màn hình đen (Terminal/CMD) lúc chạy code Python xem dòng <b>"Đã trích xuất... câu hỏi"</b> đang báo số 0.</li>
+                    <li>Kiểm tra lại file Word, chắc chắn cấu trúc bắt đầu bằng <b>Câu 1:</b>, các đáp án <b>A.</b>, <b>B.</b> và dòng <b>Đáp án:</b>.</li>
+                    <li>Chạy lại file python để nạp lại dữ liệu.</li>
+                </ul>`;
+            document.getElementById("nav-bar").style.display = "none";
+            return;
+        }
+
+        TOTAL_QUESTIONS = Math.min(50, rawData.length);
+        quizData = rawData.sort(() => Math.random() - 0.5).slice(0, TOTAL_QUESTIONS);
+        userAnswers = new Array(TOTAL_QUESTIONS).fill("");
+        
+        buildAnswerSheet();
+        renderQuestion(0);
+    };
+
+    function buildAnswerSheet() {
+        const tbody = document.getElementById("sheet-body");
+        let html = "";
+        for(let i=0; i<TOTAL_QUESTIONS; i++) {
+            html += `
+                <tr class="row-item" id="row-${i}" onclick="jumpTo(${i})">
+                    <td>Câu ${i+1}</td>
+                    <td><div class="cell-opt" id="cell-${i}-A">A</div></td>
+                    <td><div class="cell-opt" id="cell-${i}-B">B</div></td>
+                    <td><div class="cell-opt" id="cell-${i}-C">C</div></td>
+                    <td><div class="cell-opt" id="cell-${i}-D">D</div></td>
+                </tr>`;
+        }
+        tbody.innerHTML = html;
+    }
+
+    function renderQuestion(index) {
+        currentIndex = index;
+        const q = quizData[index];
+        const contentDiv = document.getElementById("q-content");
+        
+        document.getElementById("explanation-box").style.display = "none";
+        
+        const isMulti = q.title.includes("[*]") || q.content.includes("[*]");
+        const inputType = isMulti ? "checkbox" : "radio";
+        const selectedArr = userAnswers[index] ? userAnswers[index].split(",") : [];
+
+        let optionsHtml = '<div class="options">';
+        ['A', 'B', 'C', 'D'].forEach(lbl => {
+            if(q.options[lbl]) {
+                const isChecked = selectedArr.includes(lbl) ? "checked" : "";
+                optionsHtml += `
+                    <label>
+                        <input type="${inputType}" name="opt_${index}" value="${lbl}" onchange="saveAnswer()" ${isChecked}>
+                        <b>${lbl}.</b> ${q.options[lbl]}
+                    </label>`;
+            }
+        });
+        optionsHtml += '</div>';
+
+        contentDiv.innerHTML = `
+            <div class="question-title">Câu ${index + 1} / ${TOTAL_QUESTIONS} <span style="color:#888; font-weight:normal; font-size:0.8em;">(Trích từ NHCH)</span></div>
+            <p style="font-weight: bold;">${q.title}</p>
+            <p>${q.content}</p>
+            ${optionsHtml}
+        `;
+        updateUI();
+    }
+
+    function getCheckedValues() {
+        const inputs = document.querySelectorAll(`input[name="opt_${currentIndex}"]:checked`);
+        return Array.from(inputs).map(i => i.value).sort().join(",");
+    }
+
+    function saveAnswer() {
+        userAnswers[currentIndex] = getCheckedValues();
+        updateSheetColors();
+    }
+
+    function updateSheetColors() {
+        ['A', 'B', 'C', 'D'].forEach(lbl => {
+            const cell = document.getElementById(`cell-${currentIndex}-${lbl}`);
+            if(cell) {
+                if(userAnswers[currentIndex].includes(lbl)) {
+                    cell.classList.add("cell-answered");
+                    cell.innerText = lbl;
+                } else {
+                    cell.classList.remove("cell-answered");
+                    cell.innerText = " "; 
+                }
+            }
+        });
+    }
+
+    function updateUI() {
+        document.getElementById("btn-first").disabled = (currentIndex === 0);
+        document.getElementById("btn-prev").disabled = (currentIndex === 0);
+        document.getElementById("btn-next").disabled = (currentIndex === TOTAL_QUESTIONS - 1);
+        document.getElementById("btn-last").disabled = (currentIndex === TOTAL_QUESTIONS - 1);
+
+        document.querySelectorAll(".row-item").forEach(row => row.classList.remove("row-active"));
+        const activeRow = document.getElementById(`row-${currentIndex}`);
+        if(activeRow) {
+            activeRow.classList.add("row-active");
+            activeRow.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+    }
+
+    function next() { if(currentIndex < TOTAL_QUESTIONS - 1) renderQuestion(currentIndex + 1); }
+    function prev() { if(currentIndex > 0) renderQuestion(currentIndex - 1); }
+    function jumpTo(index) { renderQuestion(index); }
+
+    function showExplanation() {
+        const q = quizData[currentIndex];
+        const uAns = userAnswers[currentIndex];
+        const box = document.getElementById("explanation-box");
+
+        let statusHtml = "";
+        let boxColor = "";
+
+        if (!uAns) {
+            statusHtml = '<span style="color: var(--warning);">⚠ Bạn chưa chọn đáp án cho câu này.</span>';
+            boxColor = "#fff3e0";
+        } else if (uAns === q.answer) {
+            statusHtml = '<span style="color: var(--success);">✔ CHÍNH XÁC! Bạn đã trả lời đúng.</span>';
+            boxColor = "#e8f5e9";
+        } else {
+            statusHtml = `<span style="color: var(--error);">✘ SAI RỒI. Bạn đã chọn: <b>${uAns}</b></span>`;
+            boxColor = "#ffebee";
+        }
+
+        box.style.backgroundColor = boxColor;
+        box.innerHTML = `
+            <div style="font-size: 1.1em; margin-bottom: 10px; border-bottom: 1px dashed #ccc; padding-bottom: 10px;">${statusHtml}</div>
+            <div style="margin-bottom: 8px;"><b>Đáp án đúng của Hệ thống:</b> <span style="color: var(--success); font-weight: bold; font-size: 1.2em;">${q.answer}</span></div>
+            <div style="line-height: 1.6;"><b>Giải thích:</b> ${q.explanation ? q.explanation : "<i>Chưa cập nhật lời giải.</i>"}</div>
+        `;
+        box.style.display = "block";
+        document.querySelector('.question-content').scrollTop = document.querySelector('.question-content').scrollHeight;
+    }
+
+    function showSummary() {
+        let correct = 0; let wrong = 0; let unanswered = 0;
+        for(let i = 0; i < TOTAL_QUESTIONS; i++) {
+            const uAns = userAnswers[i];
+            const ans = quizData[i].answer;
+            if(!uAns) unanswered++;
+            else if(uAns === ans) correct++;
+            else wrong++;
+        }
+
+        const score10 = ((correct / TOTAL_QUESTIONS) * 10).toFixed(1);
+        document.getElementById("stat-correct").innerText = correct;
+        document.getElementById("stat-wrong").innerText = wrong;
+        document.getElementById("stat-unanswered").innerText = unanswered;
+        document.getElementById("summary-details").innerHTML = `
+            Tình trạng: <b>Đã hoàn thành ${TOTAL_QUESTIONS - unanswered}/${TOTAL_QUESTIONS} câu.</b><br>
+            Tỷ lệ trả lời đúng: <b>${((correct/TOTAL_QUESTIONS)*100).toFixed(1)}%</b><br>
+            Điểm quy đổi (Thang 10): <b style="color: var(--primary); font-size: 1.3em;">${score10}</b>
+        `;
+        document.getElementById("summaryModal").style.display = "block";
+    }
+
+    function closeSummary() { document.getElementById("summaryModal").style.display = "none"; }
+    window.onclick = function(event) { if (event.target == document.getElementById("summaryModal")) closeSummary(); }
+
+    function exportExcel() {
+        if(confirm("Bạn có chắc chắn muốn Nộp bài và Xuất kết quả không?")) {
+            let csvContent = "STT,Cau Hoi,Dap An Cua Ban,Dap An Dung,Ket Qua,Giai Thich\n";
+            for(let i = 0; i < TOTAL_QUESTIONS; i++) {
+                const q = quizData[i];
+                const uAns = userAnswers[i];
+                const isCorrect = (uAns === q.answer);
+                const cleanTitle = (q.title + " " + q.content).replace(/"/g, '""').replace(/\n/g, ' ');
+                const cleanExp = q.explanation.replace(/"/g, '""').replace(/\n/g, ' ');
+                let resultStr = "Chua lam";
+                if(uAns) resultStr = isCorrect ? "Dung" : "Sai";
+                csvContent += `"${i+1}","${cleanTitle}","${uAns}","${q.answer}","${resultStr}","${cleanExp}"\n`;
+            }
+            const BOM = "\uFEFF";
+            const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute("download", "Ket_Qua_Thi_Trac_Nghiem.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showSummary();
+        }
+    }
+</script>
+</body>
+</html>

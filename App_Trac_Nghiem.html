@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Ôn Tập & Thi Trắc Nghiệm</title>
+    <style>
+        :root { --primary: #1976d2; --active: #2196f3; --answered: #9c27b0; --success: #2e7d32; --error: #d32f2f; --warning: #ff9800; --bg-light: #f5f5f5; --border: #ddd; }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #e9ecef; display: flex; height: 100vh; overflow: hidden; }
+        .container { display: flex; width: 100%; max-width: 1400px; margin: auto; height: 95vh; background: #fff; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .left-panel { flex: 7; display: flex; flex-direction: column; border-right: 2px solid var(--border); padding: 20px; position: relative; }
+        .right-panel { flex: 3; display: flex; flex-direction: column; padding: 10px; background: #fafafa; }
+        .header { border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 15px; }
+        .header h2 { margin: 0; color: #333; }
+        .header h4 { margin: 5px 0 0 0; color: #666; font-weight: normal; }
+        .question-content { flex: 1; overflow-y: auto; font-size: 1.1em; line-height: 1.6; padding-right: 10px; }
+        .question-title { font-weight: bold; color: var(--error); margin-bottom: 15px; font-size: 1.2em; }
+        .options label { display: block; padding: 12px 15px; margin-bottom: 10px; background: var(--bg-light); border: 1px solid var(--border); border-radius: 5px; cursor: pointer; transition: 0.2s; }
+        .options label:hover { background: #e3f2fd; }
+        .options input { margin-right: 10px; transform: scale(1.2); }
+        .explanation-box { display: none; margin-top: 20px; padding: 15px; border-radius: 5px; background-color: #e8f5e9; border-left: 4px solid var(--success); font-size: 0.95em; }
+        .navigation { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; padding-top: 15px; border-top: 1px solid var(--border); }
+        .nav-btn { padding: 10px 15px; background: var(--warning); color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 0.95em; }
+        .nav-btn:hover { background: #f57c00; }
+        .nav-btn:disabled { background: #ccc; cursor: not-allowed; }
+        .btn-explain { background: #17a2b8; } .btn-explain:hover { background: #138496; }
+        .sheet-header { text-align: center; margin-bottom: 10px; font-weight: bold; color: var(--primary); font-size: 1.1em;}
+        .sheet-table-container { flex: 1; overflow-y: auto; margin-bottom: 10px; border: 1px solid var(--border);}
+        table { width: 100%; border-collapse: collapse; text-align: center; font-size: 0.9em; }
+        th, td { border: 1px solid var(--border); padding: 5px; }
+        th { background: var(--primary); color: white; position: sticky; top: 0; z-index: 1;}
+        .row-item { cursor: pointer; background: #fff; transition: 0.2s; }
+        .row-item:hover { background: #e0e0e0; }
+        .row-active { background: #e3f2fd !important; border-left: 4px solid var(--primary); }
+        .row-active td:first-child { font-weight: bold; color: var(--primary); }
+        .cell-opt { width: 25px; height: 25px; display: inline-block; border: 1px solid #aaa; border-radius: 3px; line-height: 25px; color: transparent; font-size: 0.8em;}
+        .cell-answered { background-color: var(--answered); color: white; border-color: var(--answered); }
+        .action-group { display: flex; flex-direction: column; gap: 8px; }
+        .summary-btn { padding: 12px; background: var(--success); color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .summary-btn:hover { background: #1b5e20; }
+        .export-btn { padding: 12px; background: var(--primary); color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .export-btn:hover { background: #1565c0; }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); }
+        .modal-content { background-color: #fff; margin: 10% auto; padding: 20px 30px; border: 1px solid #888; width: 80%; max-width: 500px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close:hover { color: black; }
+        .stat-box { display: flex; justify-content: space-between; margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;}
+        .stat-item { text-align: center; }
+        .stat-num { font-size: 2em; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="left-panel">
+        <div class="header">
+            <h2>PHẦN MỀM THI TRẮC NGHIỆM</h2>
+            <h4>Chuyên đề: Quy định pháp luật kinh doanh Bất động sản</h4>
+        </div>
+        
+        <div class="question-content">
+            <div id="q-content"></div>
+            <div id="explanation-box" class="explanation-box"></div>
+        </div>
+
+        <div class="navigation" id="nav-bar">
+            <button class="nav-btn" onclick="jumpTo(0)" id="btn-first">|&lt; Đầu</button>
+            <button class="nav-btn" onclick="prev()" id="btn-prev">&lt; Trở lại</button>
+            <button class="nav-btn btn-explain" onclick="showExplanation()" title="Xem đáp án và giải thích">💡 Giải đáp</button>
+            <button class="nav-btn" onclick="next()" id="btn-next">Tiếp tục &gt;</button>
+            <button class="nav-btn" onclick="jumpTo(TOTAL_QUESTIONS - 1)" id="btn-last">Cuối &gt;|</button>
+        </div>
+    </div>
+
+    <div class="right-panel">
+        <div class="sheet-header">PHIẾU TRẢ LỜI</div>
+        <div class="sheet-table-container">
+            <table id="answer-sheet">
+                <thead><tr><th>Câu</th><th>A</th><th>B</th><th>C</th><th>D</th></tr></thead>
+                <tbody id="sheet-body"></tbody>
+            </table>
+        </div>
+        
+        <div class="action-group">
+            <button class="summary-btn" onclick="showSummary()">📊 Kiểm tra tổng hợp</button>
+            <button class="export-btn" onclick="exportExcel()">💾 Nộp bài & Xuất Excel</button>
+        </div>
+    </div>
+</div>
+
+<div id="summaryModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeSummary()">&times;</span>
+        <h2 style="color: var(--primary); text-align: center; margin-top: 0;">Kết Quả Ôn Tập</h2>
+        <div id="summary-details" style="font-size: 1.1em; line-height: 1.8;"></div>
+        <div class="stat-box">
+            <div class="stat-item"><div class="stat-num" style="color: var(--success);" id="stat-correct">0</div><div>Đúng</div></div>
+            <div class="stat-item"><div class="stat-num" style="color: var(--error);" id="stat-wrong">0</div><div>Sai</div></div>
+            <div class="stat-item"><div class="stat-num" style="color: var(--warning);" id="stat-unanswered">0</div><div>Chưa làm</div></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const rawData = [{"title": "Câu 1:", "content": "Hoa lợi, lợi tức phát sinh từ tài sản riêng của vợ hoặc chồng trong thời kỳ hôn nhân được xác định là tài sản gì, trừ khi có thỏa thuận khác?[*]", "options": {"A": "Luôn là tài sản riêng của người có tài sản đó.", "B": "Là tài sản chung của vợ chồng.", "C": "Chia đôi giữa vợ và chồng.", "D": "Thuộc sở hữu nhà nước."}, "answer": "B,C", "explanation": "Khoản 1 Điều 33 Luật hôn nhân và gia đình 2014 quy định hoa lợi, lợi tức phát sinh từ tài sản riêng trong thời kỳ hôn nhân là tài sản chung, trừ khi có thỏa thuận khác."}, {"title": "Câu 2:", "content": "Trường hợp nào việc định đoạt tài sản riêng của vợ/chồng phải có sự đồng ý của người kia?[*]", "options": {"A": "Khi tài sản riêng đó là bất động sản.", "B": "Khi tài sản riêng đó có giá trị lớn.", "C": "Khi hoa lợi, lợi tức từ tài sản riêng đó là nguồn sống duy nhất của gia đình.", "D": "Không có trường hợp nào, tài sản riêng do người đó tự quyết định."}, "answer": "C,D", "explanation": "Khoản 2 Điều 44 Luật hôn nhân và gia đình 2014 quy định một ngoại lệ quan trọng, nếu hoa lợi, lợi tức từ tài sản riêng là nguồn sống duy nhất của gia đình thì việc định đoạt tài sản gốc phải có sự đồng ý của người kia."}, {"title": "Câu 3:", "content": "Yếu tố nào sau đây được coi là \"lao động có thu nhập\" khi Tòa án xem xét công sức đóng góp của vợ, chồng vào việc tạo lập, duy trì tài sản chung khi ly hôn?", "options": {"A": "Chỉ công việc tạo ra tiền bạc trực tiếp.", "B": "Lao động trong gia đình (nội trợ, chăm sóc con cái...).", "C": "Chỉ việc đóng góp bằng tài sản riêng.", "D": "Chỉ công việc được trả lương theo hợp đồng lao động."}, "answer": "B", "explanation": "Khoản 1 Điều 59 Luật hôn nhân và gia đình 2014 công nhận \"lao động trong gia đình được coi là lao động có thu nhập\", thể hiện sự bình đẳng và ghi nhận đóng góp gián tiếp vào tài sản chung."}, {"title": "Câu 4:", "content": "Giao dịch chuyển đổi quyền sử dụng đất nông nghiệp giữa các hộ gia đình, cá nhân có bắt buộc phải công chứng, chứng thực theo Luật Đất đai 2024 không?", "options": {"A": "Bắt buộc phải công chứng.", "B": "Bắt buộc phải chứng thực tại UBND xã.", "C": "Không bắt buộc, nhưng có thể công chứng/chứng thực theo yêu cầu.", "D": "Chỉ bắt buộc nếu giá trị đất lớn."}, "answer": "C", "explanation": "Điểm b Khoản 3 Điều 27 Luật Đất đai 2024 quy định hợp đồng chuyển đổi quyền sử dụng đất nông nghiệp không bắt buộc công chứng, chứng thực."}, {"title": "Câu 5:", "content": "Hợp đồng thế chấp nhà ở hình thành trong tương lai cho tổ chức tín dụng có bắt buộc phải công chứng, chứng thực theo Luật Nhà ở 2023 không?", "options": {"A": "Bắt buộc phải công chứng.", "B": "Bắt buộc phải chứng thực.", "C": "Không bắt buộc công chứng, chứng thực.", "D": "Chỉ bắt buộc nếu giá trị vay lớn hơn giá trị nhà."}, "answer": "C", "explanation": "Đây là một trong những ngoại lệ không bắt buộc công chứng/chứng thực theo Khoản 2 Điều 164 Luật Nhà ở 2023."}, {"title": "Câu 6:", "content": "Văn bản ủy quyền liên quan đến việc thực hiện các quyền đối với bất động sản có thể được công chứng ở đâu?", "options": {"A": "Chỉ tại tổ chức hành nghề công chứng nơi có bất động sản.", "B": "Tại bất kỳ tổ chức hành nghề công chứng nào trên toàn quốc.", "C": "Tại tổ chức hành nghề công chứng nơi người ủy quyền hoặc người được ủy quyền cư trú, hoặc nơi có bất động sản.", "D": "Tại tổ chức hành nghề công chứng nơi người ủy quyền cư trú hoặc nơi có bất động sản (không bắt buộc phải là nơi đặt trụ sở của tổ chức công chứng đó)."}, "answer": "D", "explanation": "Đây là một ngoại lệ về địa hạt công chứng được quy định trong Luật Công chứng 2024, cho phép linh hoạt hơn đối với văn bản ủy quyền liên quan đến BĐS."}, {"title": "Câu 7:", "content": "Thỏa thuận đặt cọc để mua nhà ở hình thành trong tương lai theo Luật kinh doanh bất động sản 2023 phải bao gồm nội dung gì về giá?", "options": {"A": "Không cần ghi giá, chỉ cần ghi số tiền cọc.", "B": "Phải ghi rõ giá bán hoặc giá cho thuê mua dự kiến tại thời điểm ký thỏa thuận đặt cọc.", "C": "Chỉ cần ghi khoảng giá tham khảo.", "D": "Giá sẽ được xác định khi ký hợp đồng mua bán chính thức."}, "answer": "B", "explanation": "Điều 23 Luật kinh doanh bất động sản 2023 yêu cầu thỏa thuận đặt cọc phải ghi rõ giá bán/cho thuê mua, nhằm đảm bảo tính minh bạch và ràng buộc về giá ngay từ giai đoạn đặt cọc."}, {"title": "Câu 8:", "content": "Quy định bắt buộc thanh toán qua ngân hàng theo Điều 48 Luật kinh doanh bất động sản 2023 KHÔNG áp dụng cho đối tượng nào?", "options": {"A": "Chủ đầu tư dự án bất động sản.", "B": "Doanh nghiệp kinh doanh dịch vụ môi giới bất động sản.", "C": "Cá nhân Kinh doanh bất động sản quy mô nhỏ hoặc bán nhà ở không nhằm mục đích kinh doanh.", "D": "Doanh nghiệp kinh doanh sàn giao dịch bất động sản."}, "answer": "C", "explanation": "Điều 48 Luật kinh doanh bất động sản 2023 có giới hạn phạm vi áp dụng, không bắt buộc đối với các giao dịch của cá nhân kinh doanh nhỏ lẻ hoặc không nhằm mục đích kinh doanh."}, {"title": "Câu 9:", "content": "Tác động tiềm ẩn của việc áp dụng bảng giá đất hàng năm theo Luật Đất đai 2024 (từ 2026) là gì?", "options": {"A": "Luôn làm giảm chi phí sử dụng đất cho người dân và doanh nghiệp.", "B": "Có thể làm tăng chi phí sử dụng đất, thuê đất, thuế, phí nhưng cũng đảm bảo giá trị bồi thường khi thu hồi đất sát thị trường hơn.", "C": "Không ảnh hưởng gì đến giá giao dịch thực tế trên thị trường.", "D": "Chỉ áp dụng cho đất nông nghiệp."}, "answer": "B", "explanation": "Việc bảng giá đất tiệm cận thị trường hơn sẽ làm tăng các nghĩa vụ tài chính liên quan đến đất đai nhưng đồng thời cũng nâng cao giá trị bồi thường, tạo ra cả tác động tích cực và tiêu cực tùy thuộc vào đối tượng."}, {"title": "Câu 10:", "content": "Việc Luật Đất đai 2024 không còn quy định \"hộ gia đình\" là đối tượng sử dụng đất mới có ý nghĩa gì?", "options": {"A": "Thu hồi lại đất đã cấp cho hộ gia đình trước đây.", "B": "Đơn giản hóa chủ thể quan hệ pháp luật đất đai cho phù hợp với Bộ luật dân sự, các quyền đã cấp trước đó sẽ xử lý theo quy định chuyển tiếp.", "C": "Buộc các thành viên hộ gia đình phải tách sổ đỏ riêng.", "D": "Không có ý nghĩa gì quan trọng."}, "answer": "B", "explanation": "Thay đổi này nhằm thống nhất chủ thể pháp luật giữa Luật Đất đai và Bộ luật dân sự, không ảnh hưởng đến quyền đã cấp mà sẽ có quy định chuyển tiếp xử lý."}, {"title": "Câu 11:", "content": "Người gốc Việt Nam định cư ở nước ngoài (không còn quốc tịch Việt Nam) có được phép đầu tư xây dựng nhà ở để bán, cho thuê theo Luật Đất đai 2024 không?", "options": {"A": "Không, chỉ công dân Việt Nam định cư ở nước ngoài mới được.", "B": "Có, được phép đầu tư xây dựng nhà ở, công trình xây dựng để bán, cho thuê, cho thuê mua và đầu tư hạ tầng kỹ thuật để chuyển nhượng, cho thuê quyền sử dụng đất.", "C": "Chỉ được mua nhà ở để ở.", "D": "Chỉ được đầu tư vào dự án nhà ở xã hội."}, "answer": "B", "explanation": "Luật Đất đai 2024 mở rộng quyền cho người gốc Việt Nam định cư ở nước ngoài, cho phép họ tham gia đầu tư Kinh doanh bất động sản tại Việt Nam."}, {"title": "Câu 12:", "content": "Việc xác định quyền sử dụng đất của dự án chung cư (ổn định lâu dài hay có thời hạn) thuộc phạm vi điều chỉnh chính của luật nào?", "options": {"A": "Luật Nhà ở 2023.", "B": "Luật kinh doanh bất động sản 2023.", "C": "Luật Xây dựng.", "D": "Luật Đất đai 2024 và văn bản hướng dẫn thi hành."}, "answer": "D", "explanation": "Chế độ sử dụng đất, hình thức giao đất, cho thuê đất, thời hạn sử dụng đất của các dự án (bao gồm cả dự án nhà ở) là nội dung cốt lõi thuộc phạm vi điều chỉnh của Luật Đất đai."}, {"title": "Câu 13:", "content": "Nếu một cá nhân mua căn hộ chung cư sau khi kết hôn và không dùng tài sản riêng, cũng không được tặng cho riêng hay thừa kế riêng, thì việc thế chấp căn hộ này sau đó cần sự đồng ý của ai?", "options": {"A": "Chỉ cần người đứng tên trên hợp đồng mua bán.", "B": "Chỉ cần người đứng tên trên Giấy chứng nhận (nếu đã có).", "C": "Cần sự thỏa thuận bằng văn bản của cả hai vợ chồng.", "D": "Chỉ cần thông báo cho người vợ/chồng còn lại."}, "answer": "C", "explanation": "Căn hộ hình thành sau hôn nhân từ nguồn thu nhập chung hoặc tài sản chung khác được coi là tài sản chung. Việc định đoạt (bao gồm thế chấp) tài sản chung là bất động sản phải có sự thỏa thuận bằng văn bản của cả hai vợ chồng theo Luật Hôn nhân và Gia đình."}, {"title": "Câu 14:", "content": "Hợp đồng cho thuê nhà ở với thời hạn 5 tháng có bắt buộc phải công chứng hoặc chứng thực không?", "options": {"A": "Bắt buộc công chứng.", "B": "Bắt buộc chứng thực.", "C": "Không bắt buộc, trừ khi các bên có nhu cầu.", "D": "Bắt buộc nếu giá thuê trên 10 triệu/tháng."}, "answer": "C", "explanation": "Luật Nhà ở 2023 (Điều 164 Khoản 2) quy định việc thuê nhà ở không bắt buộc công chứng, chứng thực, trừ khi các bên có nhu cầu. Quy định về thời hạn 6 tháng trong Bộ luật dân sự 2015 không còn được áp dụng trực tiếp khi Luật Nhà ở mới đã có quy định cụ thể."}, {"title": "Câu 15:", "content": "Khi phân chia di sản là bất động sản theo pháp luật, nếu hàng thừa kế thứ nhất còn đầy đủ (vợ, 2 con), thì những người ở hàng thừa kế thứ hai (ví dụ: anh trai của người chết) có được hưởng thừa kế không?", "options": {"A": "Có, được chia một phần nhỏ hơn.", "B": "Có, nếu được những người hàng thứ nhất đồng ý.", "C": "Không, vì những người ở hàng sau chỉ được hưởng nếu không còn ai ở hàng trước.", "D": "Chỉ được hưởng nếu di sản có giá trị rất lớn."}, "answer": "C", "explanation": "Nguyên tắc phân chia theo hàng thừa kế rất rõ ràng: chỉ khi hàng trước không còn ai đủ điều kiện thì hàng sau mới được xem xét."}, {"title": "Câu 16:", "content": "Một người lập di chúc truất quyền hưởng di sản của người con chưa thành niên. Di chúc này có hợp pháp về mặt nội dung truất quyền không?", "options": {"A": "Có, người lập di chúc có toàn quyền định đoạt.", "B": "Không, vì con chưa thành niên thuộc diện người thừa kế không phụ thuộc vào nội dung di chúc nên không thể bị truất quyền hoàn toàn (vẫn được hưởng 2/3 suất theo pháp luật).", "C": "Chỉ hợp pháp nếu người con đó hư hỏng, bất hiếu.", "D": "Chỉ hợp pháp nếu người con đó đã có tài sản riêng đủ sống."}, "answer": "B", "explanation": "Quyền truất hưởng di sản của người lập di chúc bị giới hạn bởi quy định về người thừa kế không phụ thuộc nội dung di chúc tại Điều 644 Bộ luật dân sự 2015. Việc truất quyền đối với con chưa thành niên là không có hiệu lực hoàn toàn."}, {"title": "Câu 17:", "content": "Nếu hợp đồng thế chấp bất động sản đã được công chứng nhưng chưa đăng ký giao dịch bảo đảm, thì hiệu lực của hợp đồng này như thế nào?", "options": {"A": "Vô hiệu hoàn toàn.", "B": "Có hiệu lực giữa các bên thế chấp và nhận thế chấp, nhưng chưa có hiệu lực đối kháng với người thứ ba.", "C": "Chỉ có hiệu lực khi có tranh chấp xảy ra.", "D": "Chỉ có hiệu lực về mặt hình thức."}, "answer": "B", "explanation": "Việc công chứng đảm bảo hiệu lực giữa các bên (nếu đủ điều kiện khác). Việc đăng ký giao dịch bảo đảm là điều kiện để phát sinh hiệu lực đối kháng với người thứ ba."}, {"title": "Câu 18:", "content": "Công ty ký hợp đồng đặt cọc mua bất động sản với bên bán là cá nhân. Sau đó cá nhân bán cho người khác. Công ty có thể đòi lại tài sản hoặc kiện được không?", "options": {"A": "Không vì hợp đồng đặt cọc không phải hợp đồng chính thức", "B": "Có, vì cá nhân đã vi phạm cam kết đặt cọc", "C": "Không, vì tài sản đã thuộc về người khác", "D": "Có, nếu có thỏa thuận rõ ràng về hủy đặt cọc"}, "answer": "B", "explanation": "Theo Điều 328 Bộ luật dân sự, nếu bên nhận cọc từ chối giao kết hoặc thực hiện hợp đồng, thì phải trả lại cọc và bồi thường gấp đôi số tiền đặt cọc, trừ khi có thỏa thuận khác."}, {"title": "Câu 19:", "content": "Theo Luật Công chứng 2024, tổ chức hành nghề công chứng bao gồm những loại hình nào?", "options": {"A": "Chỉ có Phòng Công chứng.", "B": "Chỉ có Văn phòng công chứng.", "C": "Phòng Công chứng và Văn phòng công chứng.", "D": "Văn phòng công chứng và Công ty luật có chức năng công chứng."}, "answer": "C", "explanation": "Luật Công chứng 2024 quy định rõ hai loại hình tổ chức hành nghề công chứng là Phòng Công chứng (đơn vị sự nghiệp công lập) và Văn phòng công chứng (do tư nhân thành lập, hoạt động theo loại hình công ty hợp danh theo Luật Công chứng 2024)."}, {"title": "Câu 20:", "content": "Luật Công chứng 2024 (hiệu lực 01/07/2025) có điểm mới nào về loại hình hoạt động của Văn phòng công chứng?", "options": {"A": "Chỉ cho phép loại hình công ty hợp danh.", "B": "Chỉ cho phép loại hình doanh nghiệp tư nhân.", "C": "Cho phép cả loại hình công ty hợp danh và doanh nghiệp tư nhân.", "D": "Bắt buộc văn phòng công chứng phải chuyển đổi thành Phòng Công chứng."}, "answer": "C", "explanation": "Luật Công chứng 2024 bổ sung quy định cho phép văn phòng công chứng được tổ chức và hoạt động theo loại hình doanh nghiệp tư nhân, bên cạnh loại hình công ty hợp danh đã có theo Luật Công chứng 2024."}, {"title": "Câu 21:", "content": "Nguyên tắc cơ bản nào KHÔNG phải là nguyên tắc hành nghề công chứng theo Luật Công chứng 2024?", "options": {"A": "Tuân thủ Hiến pháp và pháp luật.", "B": "Khách quan, trung thực.", "C": "Ưu tiên lợi ích của bên yêu cầu công chứng có tiềm lực tài chính mạnh hơn.", "D": "Chịu trách nhiệm trước pháp luật về việc hành nghề công chứng."}, "answer": "C", "explanation": "Nguyên tắc hành nghề công chứng đòi hỏi sự khách quan, trung thực và bảo vệ quyền lợi hợp pháp của tất cả các bên tham gia giao dịch, không phân biệt tiềm lực tài chính."}, {"title": "Câu 22:", "content": "Văn bản công chứng có giá trị pháp lý như thế nào?", "options": {"A": "Chỉ có giá trị tham khảo.", "B": "Có hiệu lực thi hành đối với các bên và có giá trị chứng cứ cao.", "C": "Cần phải được Tòa án phê duyệt mới có hiệu lực.", "D": "Có giá trị tương đương văn bản chứng thực."}, "answer": "B", "explanation": "Văn bản công chứng có hiệu lực thi hành đối với các bên liên quan và những tình tiết, sự kiện trong đó không phải chứng minh lại trước Tòa án (trừ khi bị tuyên vô hiệu), thể hiện giá trị chứng cứ cao."}, {"title": "Câu 23:", "content": "Điểm khác biệt cơ bản nhất về trách nhiệm giữa công chứng viên khi công chứng hợp đồng và người thực hiện chứng thực khi chứng thực hợp đồng là gì?", "options": {"A": "Công chứng viên chịu trách nhiệm về cả nội dung và hình thức, người chứng thực chỉ chịu trách nhiệm về hình thức.", "B": "Người chứng thực chịu trách nhiệm cao hơn về nội dung.", "C": "Cả hai đều chỉ chịu trách nhiệm về hình thức ký kết.", "D": "Công chứng viên không chịu trách nhiệm nếu các bên cung cấp thông tin sai."}, "answer": "A", "explanation": "Công chứng viên phải đảm bảo tính hợp pháp của cả nội dung hợp đồng, trong khi người thực hiện chứng thực chỉ xác nhận các yếu tố hình thức như thời gian, địa điểm, chữ ký, năng lực hành vi dân sự tại thời điểm ký kết và không chịu trách nhiệm về nội dung."}, {"title": "Câu 24:", "content": "Trường hợp nào sau đây vẫn bắt buộc phải công chứng hoặc chứng thực theo quy định của Luật Đất đai 2024?", "options": {"A": "Hợp đồng cho thuê quyền sử dụng đất giữa hai doanh nghiệp.", "B": "Hợp đồng chuyển nhượng quyền sử dụng đất mà một bên là doanh nghiệp kinh doanh bất động sản.", "C": "Văn bản về thừa kế quyền sử dụng đất giữa các cá nhân.", "D": "Hợp đồng chuyển đổi quyền sử dụng đất nông nghiệp."}, "answer": "C", "explanation": "Mặc dù Luật Đất đai 2024 có nhiều ngoại lệ không bắt buộc công chứng/chứng thực khi có DN KINH DOANH BẤT ĐỘNG SẢN tham gia, nhưng văn bản về thừa kế quyền sử dụng đất vẫn thuộc trường hợp bắt buộc phải công chứng hoặc chứng thực. Các trường hợp a, b, d thuộc diện không bắt buộc theo luật mới."}, {"title": "Câu 25:", "content": "Việc nới lỏng yêu cầu công chứng bắt buộc đối với giao dịch bất động sản khi có doanh nghiệp bất động sản tham gia tiềm ẩn rủi ro gì?", "options": {"A": "Giảm bớt thủ tục hành chính cho doanh nghiệp.", "B": "Bên yếu thế (cá nhân, Doanh nghiệp nhỏ) có thể gặp bất lợi trong hợp đồng do thiếu sự kiểm soát nội dung từ công chứng viên.", "C": "Tăng chi phí giao dịch cho các bên", "D": "Gây khó khăn cho công chứng viên trong việc hành nghề."}, "answer": "B", "explanation": "Khi không có sự kiểm soát về nội dung từ công chứng viên, bên yếu thế hơn có thể bị áp đặt các điều khoản bất lợi, không công bằng hoặc trái luật trong các hợp đồng thường do bên doanh nghiệp soạn sẵn."}, {"title": "Câu 26:", "content": "Doanh nghiệp kinh doanh bất động sản có thể lựa chọn công chứng hợp đồng, giao dịch bất động sản tại tổ chức hành nghề công chứng nào?", "options": {"A": "Chỉ tại Phòng Công chứng nơi doanh nghiệp đặt trụ sở chính.", "B": "Chỉ tại Văn phòng công chứng nơi có bất động sản", "C": "Tại bất kỳ Phòng Công chứng hoặc Văn phòng công chứng nào trên toàn quốc.", "D": "Tại Phòng Công chứng hoặc Văn phòng công chứng trong phạm vi tỉnh/thành phố nơi có bất động sản."}, "answer": "D", "explanation": "Pháp luật quy định công chứng viên chỉ được công chứng hợp đồng, giao dịch về bất động sản trong phạm vi tỉnh, thành phố trực thuộc trung ương nơi tổ chức hành nghề công chứng đặt trụ sở."}, {"title": "Câu 27:", "content": "Trường hợp nào công chứng viên được phép công chứng giao dịch bất động sản ngoài phạm vi tỉnh/thành phố nơi đặt trụ sở?", "options": {"A": "Hợp đồng mua bán nhà ở giá trị lớn.", "B": "Hợp đồng thế chấp quyền sử dụng đất.", "C": "Văn bản ủy quyền liên quan đến việc thực hiện quyền đối với bất động sản.", "D": "Hợp đồng góp vốn bằng bất động sản."}, "answer": "C", "explanation": "Quy tắc địa hạt không áp dụng đối với công chứng di chúc, văn bản từ chối nhận di sản là bất động sản và văn bản ủy quyền liên quan đến bất động sản."}, {"title": "Câu 28:", "content": "Thời hạn công chứng hợp đồng, giao dịch thông thường không quá bao nhiêu ngày kể từ ngày nhận đủ hồ sơ hợp lệ?", "options": {"A": "Không quá 01 ngày làm việc.", "B": "Không quá 02 ngày làm việc.", "C": "Không quá 05 ngày làm việc.", "D": "Không quá 10 ngày làm việc."}, "answer": "B", "explanation": "Điều 45 Luật Công chứng 2024 quy định thời hạn công chứng không quá 02 ngày làm việc; đối với giao dịch có nội dung phức tạp thì thời hạn công chứng có thể kéo dài hơn nhưng không quá 10 ngày làm việc. Trong trường hợp có sự kiện bất khả kháng hoặc trở ngại khách quan hoặc do nguyên nhân từ phía người yêu cầu công chứng dẫn đến không bảo đảm thời hạn theo quy định tại khoản này thì người yêu cầu công chứng có quyền thỏa thuận bằng văn bản với tổ chức hành nghề công chứng về thời hạn công chứng."}, {"title": "Câu 29:", "content": "Khi doanh nghiệp công chứng hợp đồng, người ký thay mặt doanh nghiệp nếu không phải người đại diện theo pháp luật cần có giấy tờ gì?", "options": {"A": "Thẻ nhân viên của doanh nghiệp.", "B": "Giấy giới thiệu của doanh nghiệp.", "C": "Văn bản ủy quyền hợp lệ (có thể cần công chứng/chứng thực).", "D": "Giấy xác nhận tình trạng hôn nhân."}, "answer": "C", "explanation": "Người ký thay mặt doanh nghiệp (không phải người đại diện theo pháp luật) phải có văn bản ủy quyền hợp lệ, nêu rõ phạm vi được ủy quyền ký kết hợp đồng cụ thể đó."}, {"title": "Câu 30:", "content": "Đối với công ty cổ phần, việc công chứng hợp đồng chuyển nhượng bất động sản có giá trị lớn có thể cần thêm giấy tờ gì từ doanh nghiệp?", "options": {"A": "Báo cáo tài chính quý gần nhất.", "B": "Quyết định hoặc Nghị quyết của Đại hội đồng cổ đông/Hội đồng quản trị phê duyệt giao dịch.", "C": "Danh sách cổ đông sáng lập.", "D": "Biên bản họp công đoàn công ty."}, "answer": "B", "explanation": "Tùy thuộc vào Điều lệ công ty và giá trị giao dịch, các giao dịch lớn có thể cần sự phê duyệt của cấp có thẩm quyền trong doanh nghiệp (ĐHĐCĐ/HĐQT đối với công ty cổ phần)."}, {"title": "Câu 31:", "content": "Hồ sơ pháp lý quan trọng nào chứng minh nhà ở hình thành trong tương lai đủ điều kiện bán mà chủ đầu tư cần cung cấp khi công chứng Hợp đồng mua bán?", "options": {"A": "Giấy chứng nhận đăng ký doanh nghiệp của chủ đầu tư.", "B": "Biên bản nghiệm thu đã hoàn thành xong phần móng của tòa nhà.", "C": "Hợp đồng hợp tác đầu tư với nhà thầu xây dựng.", "D": "Chứng thư thẩm định giá bất động sản."}, "answer": "B", "explanation": "Đây là một trong những điều kiện bắt buộc theo Luật kinh doanh bất động sản để nhà chung cư hình thành trong tương lai được phép bán, cùng với các giấy tờ pháp lý dự án và văn bản thông báo đủ điều kiện bán của Sở Xây dựng."}, {"title": "Câu 32:", "content": "Việc chuyển nhượng hợp đồng mua bán nhà ở hình thành trong tương lai giữa cá nhân (không phải Doanh nghiệp kinh doanh bất động sản) có bắt buộc phải công chứng hoặc chứng thực không?", "options": {"A": "Không bắt buộc.", "B": "Chỉ bắt buộc nếu giá trị trên 1 tỷ đồng.", "C": "Bắt buộc phải công chứng hoặc chứng thực.", "D": "Chỉ cần xác nhận của chủ đầu tư."}, "answer": "C", "explanation": "Việc chuyển nhượng HĐMB nhà ở HTTTL phải được lập thành văn bản và bắt buộc công chứng hoặc chứng thực. Sau đó cần có xác nhận của chủ đầu tư."}, {"title": "Câu 33:", "content": "Doanh nghiệp có thu nhập từ chuyển nhượng bất động sản phải nộp loại thuế nào?", "options": {"A": "Chỉ Thuế Giá trị gia tăng (GTGT).", "B": "Chỉ Thuế Thu nhập doanh nghiệp (TNDN).", "C": "Cả Thuế Giá trị gia tăng và Thuế Thu nhập doanh nghiệp (nếu thuộc đối tượng chịu thuế).", "D": "Chỉ Lệ phí trước bạ."}, "answer": "C", "explanation": "Hoạt động chuyển nhượng bất động sản của doanh nghiệp thường phải chịu cả thuế GTGT và thuế TNDN, trừ các trường hợp được miễn hoặc không chịu thuế theo quy định."}, {"title": "Câu 34:", "content": "Thuế suất Thuế Thu nhập doanh nghiệp đối với hoạt động chuyển nhượng Bất động sản hiện hành là bao nhiêu?", "options": {"A": "10%", "B": "20%", "C": "25%", "D": "0.5%"}, "answer": "B", "explanation": "Thuế suất thuế thu nhập doanh nghiệp phổ thông áp dụng cho hầu hết các doanh nghiệp, bao gồm cả hoạt động chuyển nhượng bất động sản, hiện là 20%."}, {"title": "Câu 35:", "content": "Lệ phí công chứng hợp đồng kinh doanh Bất động sản được tính dựa trên cơ sở nào?", "options": {"A": "Diện tích Bất động sản.", "B": "Giá trị tài sản hoặc giá trị hợp đồng/giao dịch theo biểu phí quy định.", "C": "Thỏa thuận tự do giữa các bên và công chứng viên.", "D": "Số lượng trang của hợp đồng."}, "answer": "B", "explanation": "Lệ phí công chứng đối với các hợp đồng có giá trị tài sản (như mua bán, thế chấp bất động sản) được tính theo thang lũy tiến dựa trên giá trị đó, theo biểu mức thu do Bộ Tài chính ban hành (hiện là Thông tư 257/2016)."}, {"title": "Câu 36:", "content": "“Thù lao công chứng\" là gì?", "options": {"A": "Tên gọi khác của Lệ phí công chứng.", "B": "Khoản tiền nộp cho cơ quan thuế.", "C": "Khoản tiền thỏa thuận trả cho công chứng viên đối với các công việc ngoài quy trình chuẩn (soạn thảo theo yêu cầu, công chứng ngoài trụ sở...).", "D": "Khoản tiền phạt nếu hồ sơ công chứng không hợp lệ."}, "answer": "C", "explanation": "Thù lao công chứng là khoản thu dựa trên thỏa thuận cho các dịch vụ phát sinh theo yêu cầu của khách hàng, ngoài các bước công chứng cơ bản đã được quy định phí."}, {"title": "Câu 37:", "content": "Rủi ro lớn nhất khi doanh nghiệp chọn chứng thực hợp đồng thay vì công chứng (khi được lựa chọn) là gì?", "options": {"A": "Chi phí chứng thực cao hơn.", "B": "Thủ tục chứng thực phức tạp hơn.", "C": "Hợp đồng có thể chứa nội dung bất lợi hoặc không hợp pháp mà không được phát hiện.", "D": "Khó tìm được UBND xã để thực hiện."}, "answer": "C", "explanation": "Do người chứng thực không chịu trách nhiệm về nội dung, nên rủi ro lớn nhất là hợp đồng có thể chứa các điều khoản vi phạm pháp luật hoặc gây bất lợi cho doanh nghiệp mà không được cảnh báo."}, {"title": "Câu 38:", "content": "Điểm mới quan trọng nhất của Luật Công chứng 2024 là gì?", "options": {"A": "Tăng lệ phí công chứng.", "B": "Bỏ hoàn toàn Văn phòng công chứng.", "C": "Quy định về công chứng điện tử.", "D": "Yêu cầu công chứng viên phải là Thẩm phán."}, "answer": "C", "explanation": "Việc chính thức hóa công chứng điện tử (trực tiếp và trực tuyến) là một trong những điểm mới nổi bật và có tác động lớn nhất của Luật Công chứng 2024, mở đường cho chuyển đổi số ngành công chứng."}, {"title": "Câu 39:", "content": "Công chứng điện tử trực tuyến (theo Luật Công chứng 2024) cho phép điều gì?", "options": {"A": "Các bên chỉ cần gửi hồ sơ qua email cho công chứng viên.", "B": "Các bên không cần có mặt tại cùng địa điểm mà giao kết qua phương tiện trực tuyến dưới sự chứng kiến của công chứng viên.", "C": "Công chứng viên tự động tạo hợp đồng bằng phần mềm.", "D": "Chỉ áp dụng cho hợp đồng có giá trị dưới 100 triệu đồng."}, "answer": "B", "explanation": "Công chứng điện tử trực tuyến cho phép các bên ở các địa điểm khác nhau vẫn có thể giao kết hợp đồng dưới sự chứng kiến trực tiếp (qua màn hình) của công chứng viên."}, {"title": "Câu 40:", "content": "Luật Công chứng 2024 có thay đổi gì về việc công chứng bản dịch?", "options": {"A": "Cho phép công chứng viên tự dịch và công chứng.", "B": "Tăng phí công chứng bản dịch.", "C": "Công chứng viên không còn công chứng bản dịch mà chỉ chứng thực chữ ký người dịch.", "D": "Yêu cầu bản dịch phải được Đại sứ quán xác nhận trước khi công chứng."}, "answer": "C", "explanation": "Luật 2024 đã bỏ quy định về việc công chứng bản dịch, thay vào đó công chứng viên chỉ chứng thực chữ ký của người dịch trên bản dịch đó."}, {"title": "Câu 41:", "content": "Lợi ích chính của công chứng điện tử đối với doanh nghiệp bất động sản là gì?", "options": {"A": "Giảm yêu cầu về năng lực tài chính của doanh nghiệp.", "B": "Tiết kiệm thời gian, chi phí đi lại, tăng tốc độ giao dịch.", "C": "Miễn hoàn toàn phí công chứng.", "D": "Không cần phải nộp thuế thu nhập doanh nghiệp."}, "answer": "B", "explanation": "Công chứng điện tử giúp giảm thời gian và chi phí đi lại, làm quy trình nhanh chóng, linh hoạt hơn, đẩy nhanh việc hoàn tất giao dịch."}, {"title": "Câu 42:", "content": "Thách thức lớn nhất khi triển khai công chứng điện tử là gì?", "options": {"A": "Thiếu công chứng viên biết sử dụng máy tính.", "B": "Đảm bảo an ninh mạng, bảo mật dữ liệu và xác thực chính xác người tham gia trực tuyến.", "C": "Người dân không muốn sử dụng công nghệ.", "D": "Chi phí giấy và mực in tăng cao."}, "answer": "B", "explanation": "Rủi ro về an ninh mạng, bảo mật thông tin và việc xác thực danh tính, ý chí tự nguyện của các bên khi giao dịch trực tuyến là những thách thức công nghệ và nghiệp vụ lớn nhất cần giải quyết."}, {"title": "Câu 43:", "content": "\"Công chứng treo\" là thuật ngữ thường dùng để chỉ tình trạng nào?", "options": {"A": "Công chứng hợp đồng trên tầng cao nhất của tòa nhà.", "B": "Hồ sơ công chứng bị tạm dừng do thiếu giấy tờ.", "C": "Các bên đã ký hợp đồng nhưng công chứng viên chưa ký/đóng dấu chờ hoàn thiện thủ tục/giấy tờ.", "D": "Hợp đồng được công chứng bằng mực tàng hình."}, "answer": "C", "explanation": "\"Công chứng treo\" là cách nói về tình trạng các bên đã ký nhưng văn bản chưa được công chứng viên ký, đóng dấu chính thức do còn chờ bổ sung giấy tờ hoặc thủ tục, tiềm ẩn nhiều rủi ro pháp lý."}, {"title": "Câu 44:", "content": "Rủi ro nào thường gặp nhất đối với hợp đồng đặt cọc mua bất động sản, kể cả khi có công chứng?", "options": {"A": "Công chứng viên thu phí đặt cọc quá cao.", "B": "Bên bán không giao bất động sản đúng hạn.", "C": "Đặt cọc trá hình huy động vốn cho dự án chưa đủ điều kiện hoặc đặt cọc qua môi giới không ràng buộc được chủ đầu tư.", "D": "Hợp đồng đặt cọc quá dài."}, "answer": "C", "explanation": "Các hình thức đặt cọc không đúng bản chất (huy động vốn sớm) hoặc đặt cọc không đúng chủ thể (qua môi giới) là những rủi ro phổ biến và nghiêm trọng, việc công chứng hợp đồng đặt cọc này không giải quyết được các rủi ro về tính pháp lý của dự án hay ràng buộc với chủ đầu tư."}, {"title": "Câu 45:", "content": "Hình thức giải quyết tranh chấp nào yêu cầu phải có thỏa thuận trước của các bên?", "options": {"A": "Tòa án nhân dân.", "B": "Trọng tài thương mại.", "C": "Hòa giải tại UBND xã.", "D": "Khiếu nại lên Sở Tư pháp."}, "answer": "B", "explanation": "Tòa án có thẩm quyền xét xử đương nhiên, trong khi Trọng tài thương mại chỉ có thẩm quyền giải quyết tranh chấp khi các bên đã có thỏa thuận trọng tài hợp lệ (trong hợp đồng hoặc thỏa thuận riêng)."}, {"title": "Câu 46:", "content": "Ưu điểm nổi bật của việc giải quyết tranh chấp bằng Trọng tài thương mại so với Tòa án là gì?", "options": {"A": "Chi phí luôn rẻ hơn.", "B": "Thủ tục nhanh chóng, linh hoạt, bảo mật, trọng tài viên có chuyên môn.", "C": "Phán quyết có thể bị kháng cáo lên Tòa án cấp cao.", "D": "Không cần nộp bất kỳ khoản phí nào."}, "answer": "B", "explanation": "Trọng tài thường nhanh hơn (1 cấp xét xử), linh hoạt hơn về thủ tục, xét xử không công khai giúp bảo mật, và các bên được chọn trọng tài viên là chuyên gia trong lĩnh vực tranh chấp."}, {"title": "Câu 47:", "content": "Nhược điểm của giải quyết tranh chấp bằng Trọng tài thương mại là gì?", "options": {"A": "Thời gian giải quyết quá dài.", "B": "Phán quyết không có giá trị thi hành.", "C": "Phải có thỏa thuận trọng tài thương mại; phạm vi áp dụng còn hạn chế, một số loại tranh chấp không được giải quyết bằng trọng tài; phán quyết trọng tài có thể bị hủy bởi tòa án.", "D": "Chỉ giải quyết được tranh chấp giữa các cá nhân."}, "answer": "C", "explanation": "Phí trọng tài có thể cao hơn án phí Tòa, phán quyết trọng tài không tự thi hành được mà cần Tòa án công nhận, và Trọng tài thương mại có thẩm quyền hạn chế hơn Tòa trong một số vấn đề như áp dụng biện pháp khẩn cấp."}, {"title": "Câu 48:", "content": "Tại sao doanh nghiệp nên cân nhắc đưa điều khoản lựa chọn Trọng tài thương mại vào hợp đồng kinh doanh bất động sản?", "options": {"A": "Để thể hiện sự giàu có của doanh nghiệp.", "B": "Để có phương thức giải quyết tranh chấp nhanh chóng, bảo mật, chuyên môn cao khi cần thiết.", "C": "Vì Tòa án không giải quyết tranh chấp bất động sản.", "D": "Để tránh phải công chứng hợp đồng."}, "answer": "B", "explanation": "Việc có sẵn điều khoản trọng tài giúp doanh nghiệp chủ động lựa chọn phương thức giải quyết phù hợp với lợi ích của mình (nhanh, bảo mật, chuyên môn) khi tranh chấp xảy ra."}, {"title": "Câu 49:", "content": "Khi một doanh nghiệp Việt Nam giao dịch bất động sản với đối tác từ Mỹ (Common Law), doanh nghiệp cần lưu ý điều gì?", "options": {"A": "Vai trò của công chứng viên Mỹ rất quan trọng trong việc đảm bảo nội dung hợp đồng.", "B": "Vai trò của luật sư đại diện cho mỗi bên là then chốt trong thẩm định và đàm phán.", "C": "Không cần phải ký hợp đồng bằng văn bản.", "D": "Chỉ cần tuân theo pháp luật Việt Nam."}, "answer": "B", "explanation": "Trong hệ thống Common Law, luật sư đóng vai trò trung tâm trong việc bảo vệ quyền lợi thân chủ, thẩm định và đàm phán hợp đồng, khác với vai trò của công chứng viên ở Việt Nam."}, {"title": "Câu 50:", "content": "Cơ quan nào có trách nhiệm ban hành quy định chi tiết về quy trình công chứng điện tử theo Luật Công chứng 2024?", "options": {"A": "Tòa án nhân dân tối cao.", "B": "Bộ Thông tin và Truyền thông.", "C": "Chính phủ và các Bộ ngành liên quan (chủ yếu là Bộ Tư pháp).", "D": "Hiệp hội Công chứng viên Việt Nam."}, "answer": "C", "explanation": "Luật giao Chính phủ quy định chi tiết việc thi hành luật, bao gồm cả các quy trình cụ thể về công chứng điện tử. Bộ Tư pháp là cơ quan chủ trì tham mưu."}, {"title": "Câu 51:", "content": "Mục đích của việc xây dựng Cơ sở dữ liệu công chứng quốc gia là gì?", "options": {"A": "Đăng ký ngành nghề tại Sở Xây dựng", "B": "Có chứng chỉ hành nghề bất động sản", "C": "Đăng ký ngành nghề “Kinh doanh bất động sản”", "D": "Xin giấy phép kinh doanh riêng về bất động sản"}, "answer": "C", "explanation": "Theo Luật Kinh doanh bất động sản 2023 và Quyết định 27/2018/QĐ-TTg, doanh nghiệp phải đăng ký ngành nghề \"Kinh doanh bất động sản\" mã ngành 6810 hoặc tương ứng trong Giấy chứng nhận đăng ký doanh nghiệp."}];
+    let TOTAL_QUESTIONS = 0;
+    let quizData = [];
+    let userAnswers = [];
+    let currentIndex = 0;
+
+    window.onload = function() {
+        // KIỂM TRA LỖI RỖNG DỮ LIỆU
+        if (!rawData || rawData.length === 0) {
+            document.getElementById("q-content").innerHTML = `
+                <h3 style='color:red;'>⚠️ Hệ thống không tìm thấy câu hỏi!</h3>
+                <p>Quá trình tạo file gặp lỗi do file Word không đúng chuẩn định dạng. Vui lòng:</p>
+                <ul>
+                    <li>Mở màn hình đen (Terminal/CMD) lúc chạy code Python xem dòng <b>"Đã trích xuất... câu hỏi"</b> đang báo số 0.</li>
+                    <li>Kiểm tra lại file Word, chắc chắn cấu trúc bắt đầu bằng <b>Câu 1:</b>, các đáp án <b>A.</b>, <b>B.</b> và dòng <b>Đáp án:</b>.</li>
+                    <li>Chạy lại file python để nạp lại dữ liệu.</li>
+                </ul>`;
+            document.getElementById("nav-bar").style.display = "none";
+            return;
+        }
+
+        TOTAL_QUESTIONS = Math.min(50, rawData.length);
+        quizData = rawData.sort(() => Math.random() - 0.5).slice(0, TOTAL_QUESTIONS);
+        userAnswers = new Array(TOTAL_QUESTIONS).fill("");
+        
+        buildAnswerSheet();
+        renderQuestion(0);
+    };
+
+    function buildAnswerSheet() {
+        const tbody = document.getElementById("sheet-body");
+        let html = "";
+        for(let i=0; i<TOTAL_QUESTIONS; i++) {
+            html += `
+                <tr class="row-item" id="row-${i}" onclick="jumpTo(${i})">
+                    <td>Câu ${i+1}</td>
+                    <td><div class="cell-opt" id="cell-${i}-A">A</div></td>
+                    <td><div class="cell-opt" id="cell-${i}-B">B</div></td>
+                    <td><div class="cell-opt" id="cell-${i}-C">C</div></td>
+                    <td><div class="cell-opt" id="cell-${i}-D">D</div></td>
+                </tr>`;
+        }
+        tbody.innerHTML = html;
+    }
+
+    function renderQuestion(index) {
+        currentIndex = index;
+        const q = quizData[index];
+        const contentDiv = document.getElementById("q-content");
+        
+        document.getElementById("explanation-box").style.display = "none";
+        
+        const isMulti = q.title.includes("[*]") || q.content.includes("[*]");
+        const inputType = isMulti ? "checkbox" : "radio";
+        const selectedArr = userAnswers[index] ? userAnswers[index].split(",") : [];
+
+        let optionsHtml = '<div class="options">';
+        ['A', 'B', 'C', 'D'].forEach(lbl => {
+            if(q.options[lbl]) {
+                const isChecked = selectedArr.includes(lbl) ? "checked" : "";
+                optionsHtml += `
+                    <label>
+                        <input type="${inputType}" name="opt_${index}" value="${lbl}" onchange="saveAnswer()" ${isChecked}>
+                        <b>${lbl}.</b> ${q.options[lbl]}
+                    </label>`;
+            }
+        });
+        optionsHtml += '</div>';
+
+        contentDiv.innerHTML = `
+            <div class="question-title">Câu ${index + 1} / ${TOTAL_QUESTIONS} <span style="color:#888; font-weight:normal; font-size:0.8em;">(Trích từ NHCH)</span></div>
+            <p style="font-weight: bold;">${q.title}</p>
+            <p>${q.content}</p>
+            ${optionsHtml}
+        `;
+        updateUI();
+    }
+
+    function getCheckedValues() {
+        const inputs = document.querySelectorAll(`input[name="opt_${currentIndex}"]:checked`);
+        return Array.from(inputs).map(i => i.value).sort().join(",");
+    }
+
+    function saveAnswer() {
+        userAnswers[currentIndex] = getCheckedValues();
+        updateSheetColors();
+    }
+
+    function updateSheetColors() {
+        ['A', 'B', 'C', 'D'].forEach(lbl => {
+            const cell = document.getElementById(`cell-${currentIndex}-${lbl}`);
+            if(cell) {
+                if(userAnswers[currentIndex].includes(lbl)) {
+                    cell.classList.add("cell-answered");
+                    cell.innerText = lbl;
+                } else {
+                    cell.classList.remove("cell-answered");
+                    cell.innerText = " "; 
+                }
+            }
+        });
+    }
+
+    function updateUI() {
+        document.getElementById("btn-first").disabled = (currentIndex === 0);
+        document.getElementById("btn-prev").disabled = (currentIndex === 0);
+        document.getElementById("btn-next").disabled = (currentIndex === TOTAL_QUESTIONS - 1);
+        document.getElementById("btn-last").disabled = (currentIndex === TOTAL_QUESTIONS - 1);
+
+        document.querySelectorAll(".row-item").forEach(row => row.classList.remove("row-active"));
+        const activeRow = document.getElementById(`row-${currentIndex}`);
+        if(activeRow) {
+            activeRow.classList.add("row-active");
+            activeRow.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+    }
+
+    function next() { if(currentIndex < TOTAL_QUESTIONS - 1) renderQuestion(currentIndex + 1); }
+    function prev() { if(currentIndex > 0) renderQuestion(currentIndex - 1); }
+    function jumpTo(index) { renderQuestion(index); }
+
+    function showExplanation() {
+        const q = quizData[currentIndex];
+        const uAns = userAnswers[currentIndex];
+        const box = document.getElementById("explanation-box");
+
+        let statusHtml = "";
+        let boxColor = "";
+
+        if (!uAns) {
+            statusHtml = '<span style="color: var(--warning);">⚠ Bạn chưa chọn đáp án cho câu này.</span>';
+            boxColor = "#fff3e0";
+        } else if (uAns === q.answer) {
+            statusHtml = '<span style="color: var(--success);">✔ CHÍNH XÁC! Bạn đã trả lời đúng.</span>';
+            boxColor = "#e8f5e9";
+        } else {
+            statusHtml = `<span style="color: var(--error);">✘ SAI RỒI. Bạn đã chọn: <b>${uAns}</b></span>`;
+            boxColor = "#ffebee";
+        }
+
+        box.style.backgroundColor = boxColor;
+        box.innerHTML = `
+            <div style="font-size: 1.1em; margin-bottom: 10px; border-bottom: 1px dashed #ccc; padding-bottom: 10px;">${statusHtml}</div>
+            <div style="margin-bottom: 8px;"><b>Đáp án đúng của Hệ thống:</b> <span style="color: var(--success); font-weight: bold; font-size: 1.2em;">${q.answer}</span></div>
+            <div style="line-height: 1.6;"><b>Giải thích:</b> ${q.explanation ? q.explanation : "<i>Chưa cập nhật lời giải.</i>"}</div>
+        `;
+        box.style.display = "block";
+        document.querySelector('.question-content').scrollTop = document.querySelector('.question-content').scrollHeight;
+    }
+
+    function showSummary() {
+        let correct = 0; let wrong = 0; let unanswered = 0;
+        for(let i = 0; i < TOTAL_QUESTIONS; i++) {
+            const uAns = userAnswers[i];
+            const ans = quizData[i].answer;
+            if(!uAns) unanswered++;
+            else if(uAns === ans) correct++;
+            else wrong++;
+        }
+
+        const score10 = ((correct / TOTAL_QUESTIONS) * 10).toFixed(1);
+        document.getElementById("stat-correct").innerText = correct;
+        document.getElementById("stat-wrong").innerText = wrong;
+        document.getElementById("stat-unanswered").innerText = unanswered;
+        document.getElementById("summary-details").innerHTML = `
+            Tình trạng: <b>Đã hoàn thành ${TOTAL_QUESTIONS - unanswered}/${TOTAL_QUESTIONS} câu.</b><br>
+            Tỷ lệ trả lời đúng: <b>${((correct/TOTAL_QUESTIONS)*100).toFixed(1)}%</b><br>
+            Điểm quy đổi (Thang 10): <b style="color: var(--primary); font-size: 1.3em;">${score10}</b>
+        `;
+        document.getElementById("summaryModal").style.display = "block";
+    }
+
+    function closeSummary() { document.getElementById("summaryModal").style.display = "none"; }
+    window.onclick = function(event) { if (event.target == document.getElementById("summaryModal")) closeSummary(); }
+
+    function exportExcel() {
+        if(confirm("Bạn có chắc chắn muốn Nộp bài và Xuất kết quả không?")) {
+            let csvContent = "STT,Cau Hoi,Dap An Cua Ban,Dap An Dung,Ket Qua,Giai Thich\n";
+            for(let i = 0; i < TOTAL_QUESTIONS; i++) {
+                const q = quizData[i];
+                const uAns = userAnswers[i];
+                const isCorrect = (uAns === q.answer);
+                const cleanTitle = (q.title + " " + q.content).replace(/"/g, '""').replace(/\n/g, ' ');
+                const cleanExp = q.explanation.replace(/"/g, '""').replace(/\n/g, ' ');
+                let resultStr = "Chua lam";
+                if(uAns) resultStr = isCorrect ? "Dung" : "Sai";
+                csvContent += `"${i+1}","${cleanTitle}","${uAns}","${q.answer}","${resultStr}","${cleanExp}"\n`;
+            }
+            const BOM = "\uFEFF";
+            const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute("download", "Ket_Qua_Thi_Trac_Nghiem.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showSummary();
+        }
+    }
+</script>
+</body>
+</html>
