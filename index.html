@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Ôn Tập & Kiểm Tra Thử</title>
+    <style>
+        :root {
+            --primary: #1976d2; /* Màu chính đồng bộ với template */
+            --bg-body: #f0f2f5;
+            --card-bg: #ffffff;
+            --text-main: #333;
+            --text-sub: #666;
+            --accent: #2e7d32;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header h1 {
+            color: var(--primary);
+            font-size: 2.5em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: var(--text-sub);
+            font-size: 1.2em;
+        }
+
+        .dashboard {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            /* Tự động chia cột linh hoạt dựa trên kích thước màn hình */
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        .subject-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-top: 5px solid var(--primary);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .subject-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.1);
+            background-color: #f8faff;
+        }
+
+        .subject-card h3 {
+            margin: 0 0 15px 0;
+            color: var(--primary);
+            font-size: 1.3em;
+            min-height: 3em; /* Đảm bảo các tiêu đề dài ngắn đều thẳng hàng */
+            display: flex;
+            align-items: center;
+        }
+
+        .subject-card .info {
+            font-size: 0.9em;
+            color: var(--text-sub);
+            margin-bottom: 20px;
+        }
+
+        .subject-card .badge {
+            display: inline-block;
+            background: #e3f2fd;
+            color: var(--primary);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.8em;
+            align-self: flex-start;
+        }
+
+        /* Responsive cho điện thoại */
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.8em; }
+            .dashboard { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>HỆ THỐNG ÔN TẬP VÀ KIỂM TRA THỬ</h1>
+        <p>Hỗ trợ đào tạo và nâng cao năng lực chuyên môn</p>
+    </div>
+
+    <div class="dashboard">
+
+        <a href="XHH.HTML" class="subject-card" target="_blank">
+            <div>
+                <h3>1. XÃ HỘI HỌC ĐẠI CƯƠNG</h3>
+                <p class="info">Hệ thống câu hỏi về lý thuyết xã hội học, cấu trúc xã hội và các thiết chế cơ bản.</p>
+            </div>
+            <span class="badge">Vào ôn tập &rsaquo;</span>
+        </a>
+
+        <a href="LAPDUAN.HTML" class="subject-card" target="_blank">
+            <div>
+                <h3>2. LẬP DỰ ÁN ĐẦU TƯ BẤT ĐỘNG SẢN</h3>
+                <p class="info">Phân tích thị trường, lập kế hoạch tài chính và đánh giá tính khả thi dự án.</p>
+            </div>
+            <span class="badge">Vào ôn tập &rsaquo;</span>
+        </a>
+
+        <a href="PTBDS.HTML" class="subject-card" target="_blank">
+            <div>
+                <h3>3. PHÁT TRIỂN BẤT ĐỘNG SẢN</h3>
+                <p class="info">Quy trình đầu tư, xây dựng và các giai đoạn phát triển tài sản bất động sản.</p>
+            </div>
+            <span class="badge">Vào ôn tập &rsaquo;</span>
+        </a>
+
+        <a href="TVDTBDS.HTML" class="subject-card" target="_blank">
+            <div>
+                <h3>4. TƯ VẤN ĐẦU TƯ BĐS</h3>
+                <p class="info">Kỹ năng tư vấn, phân tích rủi ro và các chiến lược đầu tư hiệu quả.</p>
+            </div>
+            <span class="badge">Vào ôn tập &rsaquo;</span>
+        </a>
+
+        <a href="PHONGTHUY.HTML" class="subject-card" target="_blank">
+            <div>
+                <h3>5. PHONG THỦY TRONG TƯ VẤN VÀ ĐẦU TƯ BĐS</h3>
+                <p class="info">Ứng dụng kiến thức phương Đông trong không gian sống và đầu tư kinh doanh.</p>
+            </div>
+            <span class="badge">Vào ôn tập &rsaquo;</span>
+        </a>
+
+        <a href="GIOI.HTML" class="subject-card" target="_blank">
+            <div>
+                <h3>6. GIỚI VÀ PHÁT TRIỂN</h3>
+                <p class="info">Tìm hiểu về bình đẳng giới, vai trò của giới trong các hoạt động kinh tế xã hội.</p>
+            </div>
+            <span class="badge">Vào ôn tập &rsaquo;</span>
+        </a>
+
+        <a href="PHANQUYEN.HTML" class="subject-card" target="_blank">
+            <div>
+                <h3>7. PHÂN QUYỀN VÀ QUẢN TRỊ</h3>
+                <p class="info">Cơ cấu quản lý nhà nước, phân cấp quyền lực và quản trị đô thị hiện đại.</p>
+            </div>
+            <span class="badge">Vào ôn tập &rsaquo;</span>
+        </a>
+
+    </div>
+
+</body>
+</html>
