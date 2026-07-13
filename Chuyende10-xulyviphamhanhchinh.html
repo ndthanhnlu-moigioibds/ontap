@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ôn Tập: ÔN THI - CHỨNG CHỈ HÀNH NGHỀ MÔI GIỚI BẤT ĐỘNG SẢN - CHUYÊN ĐỀ 10: XỬ LÝ VI PHẠM HÀNH CHÍNH</title>
+    <style>
+        :root { --primary: #1976d2; --bg: #f0f2f5; --text: #2c3e50; --success: #2e7d32; --error: #d32f2f; }
+        body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; }
+        
+        .app-header { background: var(--primary); color: white; padding: 15px; text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .app-header h1 { margin: 0; font-size: 1.1em; text-transform: uppercase; }
+        .progress { font-size: 0.85em; color: #d1e4f3; text-align: center; margin-top: 5px; }
+        
+        .container { padding: 15px; max-width: 600px; margin: auto; padding-bottom: 100px; }
+        .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 20px; }
+        
+        .q-meta { font-size: 0.8em; color: #888; margin-bottom: 10px; font-weight: bold; }
+        .q-text { font-size: 1.15em; font-weight: 600; line-height: 1.5; margin-bottom: 20px; }
+        
+        .options { display: flex; flex-direction: column; gap: 12px; }
+        .option-item { position: relative; display: block; padding: 15px; background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 10px; cursor: pointer; transition: 0.2s; -webkit-tap-highlight-color: transparent; }
+        .option-item input { margin-right: 10px; transform: scale(1.3); }
+        .option-item:active { background: #e3f2fd; }
+        .option-item.selected { background: #e3f2fd; border-color: var(--primary); }
+        .option-item.correct-ans { background: #e8f5e9 !important; border-color: var(--success) !important; }
+        .option-item.wrong-ans { background: #ffebee !important; border-color: var(--error) !important; }
+        
+        .btn-check-inline {
+            background: var(--primary); color: white; width: 100%; padding: 14px;
+            border: none; border-radius: 8px; font-weight: bold; font-size: 1.05em;
+            margin-top: 20px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 6px rgba(25, 118, 210, 0.2);
+        }
+        .btn-check-inline:active { transform: translateY(2px); box-shadow: none; }
+        
+        .exp-box { display: none; margin-top: 20px; padding: 18px; background: #fff; border: 1px solid #ddd; border-left: 5px solid var(--primary); border-radius: 8px; font-size: 0.95em; line-height: 1.6; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .result-title { font-size: 1.2em; font-weight: bold; margin-bottom: 10px; border-bottom: 1px dashed #ccc; padding-bottom: 10px; }
+        
+        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
+        .btn-nav { border: none; padding: 14px 20px; border-radius: 8px; font-weight: bold; font-size: 1em; cursor: pointer; width: 48%; transition: 0.2s; }
+        .btn-prev { background: #e9ecef; color: var(--text); }
+        .btn-next { background: var(--primary); color: white; }
+        .btn-nav:active { opacity: 0.8; }
+    </style>
+</head>
+<body>
+    <div class="app-header">
+        <h1>ÔN THI - CHỨNG CHỈ HÀNH NGHỀ MÔI GIỚI BẤT ĐỘNG SẢN - CHUYÊN ĐỀ 10: XỬ LÝ VI PHẠM HÀNH CHÍNH</h1>
+        <div id="progress-text" class="progress">Đang tải...</div>
+    </div>
+
+    <div class="container">
+        <div id="quiz-container"></div>
+    </div>
+
+    <div class="nav-bar">
+        <button class="btn-nav btn-prev" onclick="prevQ()">&laquo; Câu trước</button>
+        <button class="btn-nav btn-next" onclick="nextQ()">Câu tiếp &raquo;</button>
+    </div>
+
+    <script>
+        const allData = [{"level": "1", "content": "Căn cứ Điều 59 Nghị định số 16/2022/NĐ-CP, hãy xác định sự khác biệt về hình thức xử phạt bổ sung (tước quyền sử dụng chứng chỉ hành nghề) giữa hành vi (1) \"Cho người khác mượn chứng chỉ\" và hành vi (2) \"Cung cấp thông tin bất động sản không đúng sự thật\" của cá nhân môi giới?", "options": {"A": "Cả hai hành vi đều bị tước chứng chỉ từ 03 tháng đến 06 tháng vì đều là vi phạm của cá nhân.", "B": "Hành vi (1) bị tước chứng chỉ từ 03 tháng đến 06 tháng; hành vi (2) bị tước chứng chỉ từ 06 tháng đến 09 tháng.", "C": "Hành vi (1) bị tước chứng chỉ từ 06 tháng đến 09 tháng; hành vi (2) bị tước chứng chỉ từ 03 tháng đến 06 tháng.", "D": "Cả hai hành vi đều bị tước chứng chỉ từ 06 tháng đến 09 tháng để đảm bảo tính răn đe tối đa."}, "answer": "B", "explanation": "<b>Giải thích học thuật:</b> Căn cứ pháp lý: Điều 59 Nghị định 16/2022/NĐ-CP.  Lỗi cung cấp thông tin sai sự thật (Khoản 3) là lỗi gây hệ lụy xã hội lớn, nên dù là Sàn (đình chỉ hoạt động) hay Môi giới (tước chứng chỉ) thì đều chịu chung khung thời gian từ 06 đến 09 tháng (theo điểm a và điểm b Khoản 4 Điều 59). Riêng các lỗi mang tính kỹ thuật, quản lý hồ sơ tại Khoản 1 thì thời gian tước chứng chỉ nhẹ hơn, từ 03 đến 06 tháng (theo điểm c Khoản 4 Điều 59)."}, {"level": "1", "content": "Căn cứ Điều 59 Nghị định 16/2022/NĐ-CP, hành vi không lập hợp đồng hoặc hợp đồng kinh doanh dịch vụ bất động sản không đầy đủ các nội dung chính theo quy định thì bị phạt bao nhiêu tiền?", "options": {"A": "Từ 100.000.000 đồng đến 140.000.000 đồng", "B": "Từ 120.000.000 đồng đến 160.000.000 đồng", "C": "Từ 140.000.000 đồng đến 180.000.000 đồng", "D": "Từ 160.000.000 đồng đến 200.000.000 đồng"}, "answer": "B", "explanation": "<b>Giải thích học thuật:</b> Căn cứ pháp lý:  Điểm a Khoản 2 Điều 59 Nghị định số 16/2022/NĐ-CP: Quy định xử phạt đối với tổ chức kinh doanh dịch vụ bất động sản (như sàn giao dịch, môi giới, tư vấn, quản lý bất động sản) có hành vi: \"Kinh doanh dịch vụ bất động sản mà không lập hợp đồng hoặc hợp đồng không đầy đủ các nội dung chính theo quy định\". Khoản 3 Điều 4 Nghị định số 16/2022/NĐ-CP: Xác định mức phạt tiền quy định tại Điều 59 là mức phạt áp dụng đối với tổ chức. Mức 120 - 160 triệu đồng áp dụng cho Pháp nhân (Công ty, Sàn giao dịch).Đối với Cá nhân môi giới vi phạm (theo nguyên tắc 1/2), mức phạt tiền sẽ là từ 60.000.000 đồng đến 80.000.000 đồng."}];
+        let quizData = [];
+        let currentIndex = 0;
+
+        window.onload = function() {
+            if(!allData || allData.length === 0) {
+                document.getElementById("quiz-container").innerHTML = "<h3 style='color:red; text-align:center;'>Lỗi: Không có dữ liệu câu hỏi!</h3>";
+                return;
+            }
+            quizData = getSampledQuestions(100);
+            renderQuestion();
+        };
+
+        // Thuật toán lấy mẫu 100 câu theo Thang đo Bloom
+        function getSampledQuestions(count) {
+            const shuffle = (arr) => arr.sort(() => Math.random() - 0.5);
+            const filterLvl = (l) => allData.filter(q => String(q.level) === String(l));
+            
+            let p1 = shuffle(filterLvl("1")); let p2 = shuffle(filterLvl("2"));
+            let p3 = shuffle(filterLvl("3")); let p4 = shuffle(filterLvl("4")); let p5 = shuffle(filterLvl("5"));
+
+            let n1 = Math.round(count * 0.25); let n2 = Math.round(count * 0.25);
+            let n3 = Math.round(count * 0.20); let n4 = Math.round(count * 0.20);
+            let n5 = count - (n1 + n2 + n3 + n4);
+
+            let selected = [ ...p1.splice(0, n1), ...p2.splice(0, n2), ...p3.splice(0, n3), ...p4.splice(0, n4), ...p5.splice(0, n5) ];
+
+            if(selected.length < count) {
+                let remain = shuffle([...p1, ...p2, ...p3, ...p4, ...p5]);
+                selected = [...selected, ...remain.splice(0, count - selected.length)];
+            }
+            return shuffle(selected);
+        }
+
+        // Render câu hỏi lên màn hình
+        function renderQuestion() {
+            const q = quizData[currentIndex];
+            const isMulti = q.content.includes("[*]");
+            document.getElementById("progress-text").innerText = `Câu ${currentIndex + 1} / ${quizData.length}`;
+            
+            let optHtml = "";
+            let hasOptions = false;
+            
+            ['A','B','C','D'].forEach(lbl => {
+                if(q.options && q.options[lbl]) {
+                    hasOptions = true;
+                    optHtml += `
+                        <label class="option-item" id="label-${lbl}">
+                            <input type="${isMulti ? 'checkbox' : 'radio'}" name="q_opt" value="${lbl}" onchange="updateSelection()">
+                            <b>${lbl}.</b> ${q.options[lbl]}
+                        </label>`;
+                }
+            });
+
+            if(!hasOptions) {
+                optHtml = "<div style='color:red; background:#ffebee; padding:10px; border-radius:5px;'><i>⚠️ Lỗi: Không trích xuất được đáp án. Trong Word, anh hãy tự gõ A., B., C., D. (tắt tính năng đánh số tự động).</i></div>";
+            }
+
+            document.getElementById("quiz-container").innerHTML = `
+                <div class="card">
+                    <div class="q-meta">MỨC ĐỘ THỬ THÁCH: ${q.level || '1'}</div>
+                    <div class="q-text">${q.content.replace(/\[\*\]/g, "").replace(/\n/g, '<br>')}</div>
+                    <div class="options">${optHtml}</div>
+                    
+                    <button id="btn-check" class="btn-check-inline" onclick="checkAnswer()">Kiểm tra đáp án</button>
+                    
+                    <div id="exp-box" class="exp-box"></div>
+                </div>`;
+            window.scrollTo(0,0);
+        }
+
+        // Cập nhật viền xanh khi chạm chọn đáp án
+        function updateSelection() {
+            document.querySelectorAll('.option-item').forEach(el => el.classList.remove('selected'));
+            document.querySelectorAll('input:checked').forEach(el => el.parentElement.classList.add('selected'));
+        }
+
+        // Xử lý logic Nút Kiểm Tra
+        function checkAnswer() {
+            const q = quizData[currentIndex];
+            const box = document.getElementById("exp-box");
+            const btn = document.getElementById("btn-check");
+            
+            // Gom các đáp án đã chọn
+            const checkedInputs = document.querySelectorAll('input[name="q_opt"]:checked');
+            const selectedVals = Array.from(checkedInputs).map(i => i.value).sort().join(",");
+            
+            if (!selectedVals) {
+                alert("⚠️ Vui lòng chọn một phương án trước khi kiểm tra!");
+                return;
+            }
+
+            // Ẩn nút kiểm tra, hiện Box giải thích
+            btn.style.display = "none";
+            box.style.display = "block";
+
+            let resultTitle = "";
+            // Kiểm tra đúng sai
+            if (selectedVals === q.answer) {
+                resultTitle = `<div class="result-title" style="color: var(--success);">✔ CHÍNH XÁC!</div>`;
+                box.style.borderLeftColor = "var(--success)";
+            } else {
+                resultTitle = `<div class="result-title" style="color: var(--error);">✘ SAI RỒI! (Bạn chọn: ${selectedVals})</div>`;
+                box.style.borderLeftColor = "var(--error)";
+            }
+
+            // Tô màu các lựa chọn A, B, C, D
+            ['A','B','C','D'].forEach(lbl => {
+                const el = document.getElementById(`label-${lbl}`);
+                if(!el) return;
+                
+                // Tô xanh đáp án đúng của hệ thống
+                if(q.answer.includes(lbl)) {
+                    el.classList.add('correct-ans');
+                } 
+                // Tô đỏ đáp án sai mà người dùng chọn
+                else if(selectedVals.includes(lbl)) {
+                    el.classList.add('wrong-ans');
+                }
+                
+                // Vô hiệu hóa input để không cho click đổi nữa
+                const input = el.querySelector('input');
+                if(input) input.disabled = true;
+            });
+
+            // Gắn nội dung vào Box
+            box.innerHTML = `
+                ${resultTitle}
+                <div style="margin-bottom:12px; font-size:1.05em;"><b>Đáp án đúng:</b> <span style="color:var(--success); font-weight:bold">${q.answer}</span></div>
+                <div>${q.explanation || "<i>Hệ thống chưa cập nhật giải thích cho câu này.</i>"}</div>
+            `;
+
+            // Tự động cuộn mượt mà xuống phần giải thích
+            box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Điều hướng câu hỏi
+        function nextQ() { if(currentIndex < quizData.length-1) { currentIndex++; renderQuestion(); } }
+        function prevQ() { if(currentIndex > 0) { currentIndex--; renderQuestion(); } }
+    </script>
+</body>
+</html>
