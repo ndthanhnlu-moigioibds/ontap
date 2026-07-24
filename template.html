@@ -12,28 +12,20 @@
         }
         body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; background-color: #e9ecef; }
         
-        /* Màn hình chọn chế độ */
-        #mode-selection {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            height: 100vh; background: linear-gradient(135deg, #1976d2, #003d7a); color: white;
-        }
+        #mode-selection { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: linear-gradient(135deg, #1976d2, #003d7a); color: white; }
         .mode-container { display: flex; gap: 30px; margin-top: 30px; }
-        .mode-card {
-            background: white; color: #333; padding: 40px; border-radius: 15px;
-            width: 250px; text-align: center; cursor: pointer; transition: 0.3s;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
+        .mode-card { background: white; color: #333; padding: 40px; border-radius: 15px; width: 250px; text-align: center; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
         .mode-card:hover { transform: translateY(-10px); background: #e3f2fd; }
         .mode-card h3 { margin-top: 0; color: var(--primary); font-size: 1.5em; }
         .mode-card p { font-size: 0.9em; color: #666; margin-bottom: 20px; }
         .mode-btn { background: var(--primary); color: white; border: none; padding: 10px 25px; border-radius: 5px; font-weight: bold; }
 
-        /* Giao diện chính App */
         #main-app { display: none; height: 100vh; overflow: hidden; }
         .container { display: flex; width: 100%; max-width: 1440px; margin: auto; height: 95vh; background: #fff; box-shadow: 0 0 15px rgba(0,0,0,0.1); margin-top: 10px; }
         
-        .left-panel { flex: 7; display: flex; flex-direction: column; border-right: 2px solid var(--border); padding: 20px; position: relative; }
-        .right-panel { flex: 3; display: flex; flex-direction: column; padding: 15px; background: #fafafa; }
+        /* Tỷ lệ: Khung câu hỏi 80% (flex: 8), Phiếu trả lời 20% (flex: 2) */
+        .left-panel { flex: 8; display: flex; flex-direction: column; border-right: 2px solid var(--border); padding: 20px; position: relative; }
+        .right-panel { flex: 2; display: flex; flex-direction: column; padding: 12px; background: #fafafa; }
         
         .header { border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;}
         .header-text h2 { margin: 0; color: #333; font-size: 1.3em; }
@@ -42,15 +34,11 @@
 
         .question-content { flex: 1; overflow-y: auto; font-size: 1.1em; line-height: 1.6; padding-right: 15px; }
         .question-title { font-weight: bold; color: var(--error); margin-bottom: 10px; font-size: 1.2em; display: block; }
+        .q-hint { color: var(--primary); font-size: 0.9em; font-style: italic; display: block; margin-top: 5px; font-weight: bold; }
         
-        .options label {
-            display: block; padding: 12px 15px; margin-bottom: 10px;
-            background: var(--bg-light); border: 1px solid var(--border); border-radius: 5px;
-            cursor: pointer; transition: 0.2s;
-        }
+        .options label { display: block; padding: 12px 15px; margin-bottom: 10px; background: var(--bg-light); border: 1px solid var(--border); border-radius: 5px; cursor: pointer; transition: 0.2s; }
         .options label:hover { background: #e3f2fd; border-color: var(--active); }
         .options input { margin-right: 12px; transform: scale(1.3); vertical-align: middle; }
-        
         .explanation-box { display: none; margin-top: 20px; padding: 15px; border-radius: 5px; background-color: #e8f5e9; border-left: 5px solid var(--success); font-size: 0.95em; }
 
         .navigation { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; padding-top: 15px; border-top: 1px solid var(--border); }
@@ -59,27 +47,23 @@
         .nav-btn:disabled { background: #ccc; cursor: not-allowed; }
         .btn-explain { background: #17a2b8; }
 
-        /* Cột phải */
-        .sheet-header { text-align: center; margin-bottom: 10px; font-weight: bold; color: var(--primary); }
-        #student-info-section { margin-bottom: 10px; }
-        #student-info-section input { width: 100%; padding: 12px; box-sizing: border-box; border: 2px solid var(--primary); border-radius: 5px; font-weight: bold; }
-        
-        .sheet-table-container { flex: 1; overflow-y: auto; margin-bottom: 10px; border: 1px solid var(--border); }
-        table { width: 100%; border-collapse: collapse; text-align: center; font-size: 0.8em; }
-        th, td { border: 1px solid var(--border); padding: 5px 2px; }
+        .sheet-header { text-align: center; margin-bottom: 8px; font-weight: bold; color: var(--primary); font-size: 0.95em; }
+        #student-info-section { margin-bottom: 8px; }
+        #student-info-section input { width: 100%; padding: 10px; box-sizing: border-box; border: 2px solid var(--primary); border-radius: 5px; font-weight: bold; font-size: 0.9em; }
+        .sheet-table-container { flex: 1; overflow-y: auto; margin-bottom: 8px; border: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; text-align: center; font-size: 0.75em; }
+        th, td { border: 1px solid var(--border); padding: 4px 1px; }
         th { background: var(--primary); color: white; position: sticky; top: 0; z-index: 1; }
-        
         .row-item { cursor: pointer; background: #fff; }
         .row-active { background: #fff9c4 !important; outline: 2px solid var(--primary); }
-        .cell-opt { width: 22px; height: 22px; display: inline-block; border: 1px solid #aaa; border-radius: 3px; line-height: 22px; color: transparent; }
+        .cell-opt { width: 18px; height: 18px; display: inline-block; border: 1px solid #aaa; border-radius: 3px; line-height: 18px; color: transparent; font-size: 0.8em; }
         .cell-answered { background-color: var(--answered); color: white; border-color: var(--answered); }
         
-        .action-group { display: flex; flex-direction: column; gap: 8px; }
-        .btn-main { padding: 14px; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 1em; }
+        .action-group { display: flex; flex-direction: column; gap: 6px; }
+        .btn-main { padding: 10px; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 0.9em; }
         .btn-finish { background: var(--success); }
         .btn-submit { background: var(--primary); }
 
-        /* Modal */
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
         .modal-content { background: #fff; margin: 10% auto; padding: 25px; width: 90%; max-width: 500px; border-radius: 10px; position: relative; }
         .stat-box { display: flex; justify-content: space-around; margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; }
@@ -104,7 +88,6 @@
             <button class="mode-btn" style="background: var(--error);">Bắt đầu Thi ngay</button>
         </div>
     </div>
-    <p style="margin-top: 40px; font-size: 0.8em; opacity: 0.7;">Hệ thống hỗ trợ đào tạo và ôn luyện thi</p>
 </div>
 
 <div id="main-app">
@@ -123,7 +106,7 @@
                 <div id="explanation-box" class="explanation-box"></div>
             </div>
 
-            <div class="navigation">
+            <div class="navigation" id="nav-bar">
                 <button class="nav-btn" onclick="jumpTo(0)" id="btn-first">|&lt; Đầu</button>
                 <button class="nav-btn" onclick="prev()" id="btn-prev">&lt; Trở lại</button>
                 <button class="nav-btn btn-explain" id="btn-explain-tool" onclick="showExplanation()">💡 Giải đáp</button>
@@ -134,22 +117,19 @@
 
         <div class="right-panel">
             <div class="sheet-header">PHIẾU TRẢ LỜI</div>
-            
             <div id="student-info-section">
-                <input type="text" id="studentName" placeholder="Nhập Họ tên thí sinh...">
+                <input type="text" id="studentName" placeholder="Họ và tên thí sinh...">
             </div>
-
             <div class="sheet-table-container">
                 <table>
-                    <thead><tr><th>Câu</th><th>A</th><th>B</th><th>C</th><th>D</th></tr></thead>
+                    <thead><tr><th>C</th><th>A</th><th>B</th><th>C</th><th>D</th></tr></thead>
                     <tbody id="sheet-body"></tbody>
                 </table>
             </div>
-            
             <div class="action-group">
-                <button class="btn-main btn-finish" id="btn-summary-tool" onclick="showSummary()">📊 Tổng kết ôn tập</button>
-                <button class="btn-main btn-submit" id="btn-submit-tool" onclick="submitToGoogleSheet()">📤 Nộp bài Hệ thống</button>
-                <button class="nav-btn" onclick="location.reload()" style="background:#666; margin-top:5px;">🔄 Đổi chế độ</button>
+                <button class="btn-main btn-finish" id="btn-summary-tool" onclick="showSummary()">📊 Tổng kết</button>
+                <button class="btn-main btn-submit" id="btn-submit-tool" onclick="submitToGoogleSheet()">📤 Nộp bài</button>
+                <button class="nav-btn" onclick="location.reload()" style="background:#666; padding:8px; font-size:0.85em;">🔄 Đổi chế độ</button>
             </div>
         </div>
     </div>
@@ -170,87 +150,70 @@
 </div>
 
 <script>
-    /* Tìm đến phần <script> trong template.html và thay thế các hàm tương ứng */
+    const rawData = {{QUIZ_DATA}};
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRgs78dsaDEsio35YinE0TmogSXWfqoFCx03deOBdNqhyvrHUJ23SHtepIkpjYg65XyA/exec";
 
-const rawData = {{QUIZ_DATA}};
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRgs78dsaDEsio35YinE0TmogSXWfqoFCx03deOBdNqhyvrHUJ23SHtepIkpjYg65XyA/exec";
+    let currentMode = 'study'; 
+    let quizData = [];
+    let userAnswers = [];
+    let currentIndex = 0;
+    let TOTAL_QUESTIONS = 0;
 
-let currentMode = 'study'; 
-let quizData = [];
-let userAnswers = [];
-let currentIndex = 0;
-let TOTAL_QUESTIONS = 0;
+    function startApp(mode) {
+        currentMode = mode;
+        document.getElementById("mode-selection").style.display = "none";
+        document.getElementById("main-app").style.display = "block";
 
-function startApp(mode) {
-    currentMode = mode;
-    document.getElementById("mode-selection").style.display = "none";
-    document.getElementById("main-app").style.display = "block";
+        if (!rawData || rawData.length === 0) {
+            document.getElementById("q-content").innerHTML = `<div style="color:red; font-size:1.2em; font-weight:bold;">Lỗi Hệ Thống: Không trích xuất được câu nào.</div>`;
+            document.getElementById("nav-bar").style.display = "none";
+            return;
+        }
 
-    if (mode === 'study') {
-        document.getElementById("app-mode-badge").innerText = "CHẾ ĐỘ: ÔN TẬP (100 CÂU)";
-        document.getElementById("student-info-section").style.display = "none";
-        document.getElementById("btn-submit-tool").style.display = "none";
-        document.getElementById("btn-summary-tool").style.display = "block";
-        document.getElementById("btn-explain-tool").style.display = "block";
-        
-        // BỐC 100 CÂU THEO TỶ LỆ
-        quizData = getSampledQuestions(100);
-    } else {
-        document.getElementById("app-mode-badge").innerText = "CHẾ ĐỘ: KIỂM TRA (50 CÂU)";
-        document.getElementById("app-mode-badge").style.background = "var(--error)";
-        document.getElementById("student-info-section").style.display = "block";
-        document.getElementById("btn-submit-tool").style.display = "block";
-        document.getElementById("btn-summary-tool").style.display = "none";
-        document.getElementById("btn-explain-tool").style.display = "none";
-        
-        // BỐC 50 CÂU THEO TỶ LỆ
-        quizData = getSampledQuestions(50);
+        if (mode === 'study') {
+            document.getElementById("app-mode-badge").innerText = "CHẾ ĐỘ: ÔN TẬP (100 CÂU)";
+            document.getElementById("student-info-section").style.display = "none";
+            document.getElementById("btn-submit-tool").style.display = "none";
+            document.getElementById("btn-summary-tool").style.display = "block";
+            document.getElementById("btn-explain-tool").style.display = "block";
+            quizData = getSampledQuestions(100);
+        } else {
+            document.getElementById("app-mode-badge").innerText = "CHẾ ĐỘ: KIỂM TRA (50 CÂU)";
+            document.getElementById("app-mode-badge").style.background = "var(--error)";
+            document.getElementById("student-info-section").style.display = "block";
+            document.getElementById("btn-submit-tool").style.display = "block";
+            document.getElementById("btn-summary-tool").style.display = "none";
+            document.getElementById("btn-explain-tool").style.display = "none";
+            quizData = getSampledQuestions(50);
+        }
+
+        TOTAL_QUESTIONS = quizData.length;
+        userAnswers = new Array(TOTAL_QUESTIONS).fill("");
+        buildAnswerSheet();
+        renderQuestion(0);
     }
 
-    TOTAL_QUESTIONS = quizData.length;
-    userAnswers = new Array(TOTAL_QUESTIONS).fill("");
-    buildAnswerSheet();
-    renderQuestion(0);
-}
+    function getSampledQuestions(count) {
+        const filterLvl = (l) => rawData.filter(q => String(q.level) === String(l));
+        let p1 = shuffle(filterLvl("1")); let p2 = shuffle(filterLvl("2"));
+        let p3 = shuffle(filterLvl("3")); let p4 = shuffle(filterLvl("4")); let p5 = shuffle(filterLvl("5"));
 
-// THUẬT TOÁN BỐC MẪU PHÂN TẦNG LINH HOẠT
-function getSampledQuestions(count) {
-    const filterLvl = (l) => rawData.filter(q => String(q.level) === String(l));
-    
-    let p1 = shuffle(filterLvl("1"));
-    let p2 = shuffle(filterLvl("2"));
-    let p3 = shuffle(filterLvl("3"));
-    let p4 = shuffle(filterLvl("4"));
-    let p5 = shuffle(filterLvl("5"));
+        let n1 = Math.round(count * 0.25); let n2 = Math.round(count * 0.25);
+        let n3 = Math.round(count * 0.20); let n4 = Math.round(count * 0.20);
+        let n5 = count - (n1 + n2 + n3 + n4);
 
-    // Tính toán số lượng câu cần bốc dựa trên % yêu cầu
-    // 25% - 25% - 20% - 20% - 10%
-    const n1 = Math.round(count * 0.25);
-    const n2 = Math.round(count * 0.25);
-    const n3 = Math.round(count * 0.20);
-    const n4 = Math.round(count * 0.20);
-    const n5 = count - (n1 + n2 + n3 + n4); // Số còn lại cho mức 5
+        let selected = [ ...p1.splice(0, n1), ...p2.splice(0, n2), ...p3.splice(0, n3), ...p4.splice(0, n4), ...p5.splice(0, n5) ];
 
-    let selected = [
-        ...p1.splice(0, n1),
-        ...p2.splice(0, n2),
-        ...p3.splice(0, n3),
-        ...p4.splice(0, n4),
-        ...p5.splice(0, n5)
-    ];
-
-    // Bốc bù nếu ngân hàng không đủ câu cho một mức độ nhất định
-    if (selected.length < count) {
-        let remainPool = shuffle([...p1, ...p2, ...p3, ...p4, ...p5]);
-        let needed = count - selected.length;
-        selected = [...selected, ...remainPool.splice(0, needed)];
+        if (selected.length < count) {
+            let remain = shuffle([...p1, ...p2, ...p3, ...p4, ...p5]);
+            let needed = count - selected.length;
+            selected = [...selected, ...remain.splice(0, needed)];
+        }
+        
+        return shuffle(selected).slice(0, count);
     }
-    
-    return shuffle(selected);
-}
 
-function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
-// ... (Các hàm buildAnswerSheet, renderQuestion, updateUI giữ nguyên từ bản trước)
+    function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
 
     function buildAnswerSheet() {
         const tbody = document.getElementById("sheet-body");
@@ -268,26 +231,37 @@ function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
     }
 
     function renderQuestion(index) {
+        if (!quizData[index]) return;
         currentIndex = index;
         const q = quizData[index];
         document.getElementById("explanation-box").style.display = "none";
         
-        const isMulti = q.content.includes("[*]");
+        let qContentLower = q.content ? q.content.toLowerCase() : "";
+        const isMulti = (q.answer && q.answer.includes(",")) || qContentLower.includes("(chọn 2");
         const inputType = isMulti ? "checkbox" : "radio";
+        const multiHint = isMulti ? "<span class='q-hint'>* Câu hỏi này yêu cầu chọn nhiều đáp án</span>" : "";
+        
         const selectedArr = userAnswers[index] ? userAnswers[index].split(",") : [];
 
         let optHtml = '<div class="options">';
-        ['A', 'B', 'C', 'D'].forEach(lbl => {
-            if(q.options[lbl]) {
+        let hasOptions = false;
+        ['A', 'B', 'C', 'D', 'E', 'F'].forEach(lbl => {
+            if(q.options && q.options[lbl]) {
+                hasOptions = true;
                 const checked = selectedArr.includes(lbl) ? "checked" : "";
                 optHtml += `<label><input type="${inputType}" name="opt_${index}" value="${lbl}" onchange="saveAns()" ${checked}><b>${lbl}.</b> ${q.options[lbl]}</label>`;
             }
         });
         optHtml += '</div>';
 
+        if(!hasOptions) {
+            optHtml = `<div style='color:red; background:#ffebee; padding:10px; border-radius:5px;'>⚠️ Lỗi: Không trích xuất được đáp án.</div>`;
+        }
+
         document.getElementById("q-content").innerHTML = `
-            <div class="question-title">Câu hỏi:</div>
-            <p style="font-weight:500">${q.content.replace(/\n/g, '<br>')}</p>
+            <div class="question-title">Câu hỏi (Mức độ ${q.level || '1'}):</div>
+            <p style="font-weight:500; font-size:1.15em;">${q.content.replace(/\n/g, '<br>')}</p>
+            ${multiHint}
             ${optHtml}
         `;
         updateUI();
@@ -300,7 +274,7 @@ function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
     }
 
     function updateSheetColors() {
-        const ans = userAnswers[currentIndex];
+        const ans = userAnswers[currentIndex] || "";
         ['A', 'B', 'C', 'D'].forEach(lbl => {
             const cell = document.getElementById(`cell-${currentIndex}-${lbl}`);
             if(cell) {
@@ -332,10 +306,19 @@ function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
         const q = quizData[currentIndex];
         const uAns = userAnswers[currentIndex];
         const box = document.getElementById("explanation-box");
-        let status = uAns ? (uAns === q.answer ? `<b style="color:var(--success)">ĐÚNG!</b>` : `<b style="color:var(--error)">SAI (Bạn chọn: ${uAns})</b>`) : `<b style="color:var(--warning)">Chưa làm.</b>`;
         
-        box.innerHTML = `${status}<br><b>Đáp án đúng: ${q.answer}</b><hr>${q.explanation || "Không có giải thích."}`;
+        let status = `<b style="color:var(--warning)">Chưa làm.</b>`;
+        if (uAns) {
+            if (uAns === q.answer) {
+                status = `<b style="color:var(--success)">ĐÚNG!</b>`;
+            } else {
+                status = `<b style="color:var(--error)">SAI (Bạn chọn: ${uAns})</b>`;
+            }
+        }
+        
+        box.innerHTML = `${status}<br><b>Đáp án đúng: <span style="color:var(--success)">${q.answer || "Không rõ"}</span></b><hr><div style="line-height:1.6;">${q.explanation || "Không có giải thích."}</div>`;
         box.style.display = "block";
+        document.querySelector('.question-content').scrollTop = document.querySelector('.question-content').scrollHeight;
     }
 
     function showSummary() {
@@ -354,37 +337,33 @@ function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
 
     function submitToGoogleSheet() {
         const name = document.getElementById("studentName").value.trim();
-        if(!name) { alert("⚠️ Vui lòng nhập Họ và Tên / Lớp của bạn trước khi nộp bài!"); return; }
-        if(!confirm("Xác nhận nộp bài? Kết quả sẽ được gửi về máy chủ của Giảng viên.")) return;
+        if(!name) { alert("Anh hãy nhập Tên để hệ thống ghi nhận kết quả thi!"); return; }
+        if(!confirm("Xác nhận nộp bài? Kết quả sẽ gửi về máy chủ của Giảng viên.")) return;
 
         const btn = document.getElementById("btn-submit-tool");
-        btn.disabled = true; btn.innerText = "⏳ Đang nộp lên hệ thống...";
+        btn.disabled = true; btn.innerText = "⏳ Đang nộp...";
 
         let correct = userAnswers.filter((a, i) => a === quizData[i].answer).length;
         const payload = {
             name: name,
             score: ((correct/TOTAL_QUESTIONS)*10).toFixed(1),
             correct: `${correct}/${TOTAL_QUESTIONS}`,
-            details: userAnswers.map((a, i) => `Câu ${i+1}: [Chọn: ${a || 'Trống'}] (Đ/A đúng: ${quizData[i].answer})`).join(" | ")
+            details: userAnswers.map((a, i) => `Câu ${i+1}: ${a || '?'}`).join(" | ")
         };
 
-        // Kỹ thuật vượt lỗi CORS của Google: Dùng text/plain thay vì application/json
-        fetch(SCRIPT_URL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "text/plain;charset=utf-8",
-            },
-            body: JSON.stringify(payload)
+        fetch(SCRIPT_URL, { 
+            method: "POST", 
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(payload) 
         })
-        .then(response => {
-            alert("🎉 Chúc mừng! Bài thi đã được nộp thành công."); 
-            btn.innerText = "✔ Đã nộp bài"; 
-            btn.style.backgroundColor = "var(--success)";
+        .then(() => { 
+            alert("Chúc mừng! Bài thi đã nộp thành công."); 
+            btn.innerText = "✔ Đã nộp"; 
+            btn.style.background = "var(--success)";
             showSummary(); 
         })
-        .catch(error => { 
-            console.error("Chi tiết lỗi:", error);
-            alert("❌ Không thể kết nối với Google Sheet. Vui lòng kiểm tra lại đường link SCRIPT_URL hoặc đường truyền Internet!"); 
+        .catch(() => { 
+            alert("Lỗi mạng! Không thể gửi dữ liệu lên máy chủ."); 
             btn.disabled = false; 
             btn.innerText = "📤 Thử nộp lại";
         });
