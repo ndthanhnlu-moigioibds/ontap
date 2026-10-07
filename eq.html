@@ -90,11 +90,8 @@
         }
 
         .question-card:hover { border-color: #94a3b8; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05); }
-
         .question-text { font-weight: 600; font-size: 16px; margin-bottom: 20px; color: var(--primary); }
-
         .options-group { display: flex; justify-content: space-between; gap: 10px; }
-
         .option-btn { flex: 1; position: relative; }
         .option-btn input[type="radio"] { display: none; }
         
@@ -127,21 +124,16 @@
 
         /* Result Section */
         #result-section { display: none; margin-top: 50px; animation: fadeIn 0.6s ease-out; }
-        
         .score-dashboard { display: flex; gap: 20px; margin-bottom: 30px; }
-        
         .total-score-card {
             flex: 1; background: var(--primary); color: white; padding: 30px;
             border-radius: var(--radius); text-align: center; display: flex;
             flex-direction: column; justify-content: center;
         }
-
         .total-score-card .score-number { font-size: 64px; font-weight: 700; color: var(--accent); line-height: 1; margin: 10px 0; }
-        
         .evaluation-card { flex: 2; background: var(--card-bg); padding: 30px; border-radius: var(--radius); border: 1px solid var(--border-color); }
         .eval-title { font-size: 22px; font-weight: 700; margin-bottom: 15px; }
         .eval-desc { color: var(--text-main); font-size: 15px; }
-
         .component-analysis { background: var(--card-bg); padding: 30px; border-radius: var(--radius); border: 1px solid var(--border-color); margin-top: 20px; }
         .component-row { margin-bottom: 20px; }
         .comp-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-weight: 600; font-size: 14px; }
@@ -176,11 +168,244 @@
     </div>
 
     <form id="eq-form">
-        <!-- Khu vực chứa câu hỏi sẽ được JavaScript đổ dữ liệu vào đây -->
-        <div id="quiz-container"></div>
+        
+        <!-- PHẦN 1 -->
+        <div class="category-title"><span>Phần 1</span> Tự nhận thức (Self-awareness)</div>
+        
+        <div class="question-card">
+            <div class="question-text">Câu 1: Khi để vuột mất một giao dịch lớn hoặc bị khách hàng hủy cọc, tôi lập tức nhận diện được cảm xúc tiêu cực của mình và biết rõ nó sẽ ảnh hưởng thế nào đến cách tôi làm việc.</div>
+            <div class="options-group">
+                <div class="option-btn"><input type="radio" name="q1" id="q1_1" value="1"><label for="q1_1" data-val="1">1. Hoàn toàn không</label></div>
+                <div class="option-btn"><input type="radio" name="q1" id="q1_2" value="2"><label for="q1_2" data-val="2">2. Hiếm khi</label></div>
+                <div class="option-btn"><input type="radio" name="q1" id="q1_3" value="3"><label for="q1_3" data-val="3">3. Đôi khi</label></div>
+                <div class="option-btn"><input type="radio" name="q1" id="q1_4" value="4"><label for="q1_4" data-val="4">4. Thường xuyên</label></div>
+                <div class="option-btn"><input type="radio" name="q1" id="q1_5" value="5"><label for="q1_5" data-val="5">5. Rất chính xác</label></div>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-text">Câu 2: Tôi nắm rõ các 'điểm mù' (điểm yếu) trong kỹ năng tư vấn hay chốt sale của mình và không ngại thừa nhận chúng để tìm cách cải thiện.</div>
+            <div class="options-group">
+                <div class="option-btn"><input type="radio" name="q2" id="q2_1" value="1"><label for="q2_1" data-val="1">1. Hoàn toàn không</label></div>
+                <div class="option-btn"><input type="radio" name="q2" id="q2_2" value="2"><label for="q2_2" data-val="2">2. Hiếm khi</label></div>
+                <div class="option-btn"><input type="radio" name="q2" id="q2_3" value="3"><label for="q2_3" data-val="3">3. Đôi khi</label></div>
+                <div class="option-btn"><input type="radio" name="q2" id="q2_4" value="4"><label for="q2_4" data-val="4">4. Thường xuyên</label></div>
+                <div class="option-btn"><input type="radio" name="q2" id="q2_5" value="5"><label for="q2_5" data-val="5">5. Rất chính xác</label></div>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-text">Câu 3: Tôi có sự tự tin vững chắc vào giá trị và chuyên môn của mình, không bị dao động nghiêm trọng ngay cả khi bị khách hàng hoặc đối tác từ chối phũ phàng.</div>
+            <div class="options-group">
+                <div class="option-btn"><input type="radio" name="q3" id="q3_1" value="1"><label for="q3_1" data-val="1">1. Hoàn toàn không</label></div>
+                <div class="option-btn"><input type="radio" name="q3" id="q3_2" value="2"><label for="q3_2" data-val="2">2. Hiếm khi</label></div>
+                <div class="option-btn"><input type="radio" name="q3" id="q3_3" value="3"><label for="q3_3" data-val="3">3. Đôi khi</label></div>
+                <div class="option-btn"><input type="radio" name="q3" id="q3_4" value="4"><label for="q3_4" data-val="4">4. Thường xuyên</label></div>
+                <div class="option-btn"><input type="radio" name="q3" id="q3_5" value="5"><label for="q3_5" data-val="5">5. Rất chính xác</label></div>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-text">Câu 4: Ngay giữa một cuộc đàm phán giá cả căng thẳng, tôi vẫn nhận thức rõ nhịp tim, sự thay đổi giọng nói và những cảm xúc đang nảy sinh bên trong mình.</div>
+            <div class="options-group">
+                <div class="option-btn"><input type="radio" name="q4" id="q4_1" value="1"><label for="q4_1" data-val="1">1. Hoàn toàn không</label></div>
+                <div class="option-btn"><input type="radio" name="q4" id="q4_2" value="2"><label for="q4_2" data-val="2">2. Hiếm khi</label></div>
+                <div class="option-btn"><input type="radio" name="q4" id="q4_3" value="3"><label for="q4_3" data-val="3">3. Đôi khi</label></div>
+                <div class="option-btn"><input type="radio" name="q4" id="q4_4" value="4"><label for="q4_4" data-val="4">4. Thường xuyên</label></div>
+                <div class="option-btn"><input type="radio" name="q4" id="q4_5" value="5"><label for="q4_5" data-val="5">5. Rất chính xác</label></div>
+            </div>
+        </div>
+
+        <!-- PHẦN 2 -->
+        <div class="category-title"><span>Phần 2</span> Tự điều chỉnh (Self-regulation)</div>
+        
+        <div class="question-card">
+            <div class="question-text">Câu 5: Khi thị trường bất động sản biến động xấu hoặc công ty thay đổi chính sách, tôi nhanh chóng lấy lại bình tĩnh, linh hoạt điều chỉnh chiến lược thay vì hoang mang, phàn nàn.</div>
+            <div class="options-group">
+                <div class="option-btn"><input type="radio" name="q5" id="q5_1" value="1"><label for="q5_1" data-val="1">1. Hoàn toàn không</label></div>
+                <div class="option-btn"><input type="radio" name="q5" id="q5_2" value="2"><label for="q5_2" data-val="2">2. Hiếm khi</label></div>
+                <div class="option-btn"><input type="radio" name="q5" id="q5_3" value="3"><label for="q5_3" data-val="3">3. Đôi khi</label></div>
+                <div class="option-btn"><input type="radio" name="q5" id="q5_4" value="4"><label for="q5_4" data-val="4">4. Thường xuyên</label></div>
+                <div class="option-btn"><input type="radio" name="q5" id="q5_5" value="5"><label for="q5_5" data-val="5">5. Rất chính xác</label></div>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-text">Câu 6: Khi khách hàng tỏ ra vô lý, trịch thượng hoặc nổi giận, tôi có khả năng kìm nén phản xạ 'phòng thủ/cãi lại' để duy trì phong thái chuyên nghiệp và lắng nghe họ.</div>
+            <div class="options-group">
+                <div class="option-btn"><input type="radio" name="q6" id="q6_1" value="1"><label for="q6_1" data-val="1">1. Hoàn toàn không</label></div>
+                <div class="option-btn"><input type="radio" name="q6" id="q6_2" value="2"><label for="q6_2" data-val="2">2. Hiếm khi</label></div>
+                <div class="option-btn"><input type="radio" name="q6" id="q6_3" value="3"><label for="q6_3" data-val="3">3. Đôi khi</label></div>
+                <div class="option-btn"><input type="radio" name="q6" id="q6_4" value="4"><label for="q6_4" data-val="4">4. Thường xuyên</label></div>
+                <div class="option-btn"><input type="radio" name="q6" id="q6_5" value="5"><label for="q6_5" data-val="5">5. Rất chính xác</label></div>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-text">Câu 7: Đứng trước áp lực doanh số khắc nghiệt, tôi vẫn kiên quyết từ chối thực hiện những giao dịch lừa dối khách hàng hoặc vi phạm đạo đức nghề nghiệp.</div>
+            <div class="options-group">
+                <div class="option-btn"><input type="radio" name="q7" id="q7_1" value="1"><label for="q7_1" data-val="1">1. Hoàn toàn không</label></div>
+                <div class="option-btn"><input type="radio" name="q7" id="q7_2" value="2"><label for="q7_2" data-val="2">2. Hiếm khi</label></div>
+                <div class="option-btn"><input type="radio" name="q7" id="q7_3" value="3"><label for="q7_3" data-val="3">3. Đôi khi</label></div>
+                <div class="option-btn"><input type="radio" name="q7" id="q7_4" value="4"><label for="q7_4" data-val="4">4. Thường xuyên</label></div>
+                <div class="option-btn"><input type="radio" name="q7" id="q7_5" value="5"><label for="q7_5" data-val="5">5. Rất chính xác</label></div>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-text">Câu 8: Tôi có các kỹ thuật cá nhân (thở sâu, thay đổi góc nhìn) để nhanh chóng 'F5' bản thân, thoát khỏi sự thất vọng khi một hợp đồng chắc chắn lại bị hủy phút chót.</div>
+            <div class="options-group">
+                <div class="option-btn"><input type="radio" name="q8" id="q8_1" value="1"><label for="q8_1" data-val="1">1. Hoàn toàn không</label></div>
+                <div class="option-btn"><input type="radio" name="q8" id="q8_2" value="2"><label for="q8_2" data-val="2">2. Hiếm khi</label></div>
+                <div class="option-btn"><input type="radio" name="q8" id="q8_3" value="3"><label for="q8_3" data-val="3">3. Đôi khi</label></div>
+                <div class="option-btn"><input type="radio" name="q8" id="q8_4" value="4"><label for="q8_4" data-val="4">4. Thường xuyên</label></div>
+                <div class="option-btn"><input type="radio" name="q8" id="q8_5" value="5"><label for="q8_5" data-val="5">5. Rất chính xác</label></div>
+            </div>
+        </div>
+
+        <!-- PHẦN 3 -->
+        <div class="category-title"><span>Phần 3</span> Động lực (Motivation)</div>
+        
+        <div class="question-card">
+            <div class="question-text">Câu 9: Sự từ chối liên tục từ khách hàng không làm tôi mất đi sự nhiệt huyết; trái lại, nó thôi thúc tôi tìm ra cách tiếp cận thông minh hơn.</div>
+            <div class="options-group">
+                <div class="option-btn"><input type="radio" name="q9" id="q9_1" value="1"><label for="q9_1" data-val="1">1. Hoàn toàn không</label></div>
+                <div class="option-btn"><input type="radio" name="q9" id="q9_2" value="2"><label for="q9_2" data-val="2">2. Hiếm khi</label></div>
+                <div class="option-btn"><input type="radio" name="q9" id="q9_3" value="3"><label for="q9_3" data-val="3">3. Đôi khi</label></div>
+                <div class="option-btn"><input type="radio" name="q9" id="q9_4" value="4"><label for="q9_4" data-val="4">4. Thường xuyên</label></div>
+                <div class="option-btn"><input type="radio" name="q9" id="q9_5" value="5"><label for="q9_5" data-val="5">5. Rất chính xác</label></div>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-text">Câu 10: Mục tiêu sâu xa của tôi không chỉ là chốt deal để lấy hoa hồng, mà là cảm giác chinh phục thử thách khó và mang lại giá trị thực sự cho khách hàng.</div>
+            <div class="options-group">
+                <div class="option-btn"><input type="radio" name="q10" id="q10_1" value="1"><label for="q10_1" data-val="1">1. Hoàn toàn không</label></div>
+                <div class="option-btn"><input type="radio" name="q10" id="q10_2" value="2"><label for="q10_2" data-val="2">2. Hiếm khi</label></div>
+                <div class="option-btn"><input type="radio" name="q10" id="q10_3" value="3"><label for="q10_3" data-val="3">3. Đôi khi</label></div>
+                <div class="option-btn"><input type="radio" name="q10" id="q10_4" value="4"><label for="q10_4" data-val="4">4. Thường xuyên</label></div>
+                <div class="option-btn"><input type="radio" name="q10" id="q10_5" value="5"><label for="q10_5" data-val="5">5. Rất chính xác</label></div>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-text">Câu 11: Dù thị trường đóng băng hay ảm đạm, tôi vẫn kiên trì theo đuổi các chỉ tiêu công việc hàng ngày mà không cần cấp trên thúc giục.</div>
+            <div class="options-group">
+                <div class="option-btn"><input type="radio" name="q11" id="q11_1" value="1"><label for="q11_1" data-val="1">1. Hoàn toàn không</label></div>
+                <div class="option-btn"><input type="radio" name="q11" id="q11_2" value="2"><label for="q11_2" data-val="2">2. Hiếm khi</label></div>
+                <div class="option-btn"><input type="radio" name="q11" id="q11_3" value="3"><label for="q11_3" data-val="3">3. Đôi khi</label></div>
+                <div class="option-btn"><input type="radio" name="q11" id="q11_4" value="4"><label for="q11_4" data-val="4">4. Thường xuyên</label></div>
+                <div class="option-btn"><input type="radio" name="q11" id="q11_5" value="5"><label for="q11_5" data-val="5">5. Rất chính xác</label></div>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-text">Câu 12: Khi thấy một cơ hội bán hàng chớp nhoáng (ví dụ: căn nhà giá ngộp), tôi sẵn sàng dốc toàn lực hành động ngay lập tức thay vì chần chừ đợi chỉ đạo.</div>
+            <div class="options-group">
+                <div class="option-btn"><input type="radio" name="q12" id="q12_1" value="1"><label for="q12_1" data-val="1">1. Hoàn toàn không</label></div>
+                <div class="option-btn"><input type="radio" name="q12" id="q12_2" value="2"><label for="q12_2" data-val="2">2. Hiếm khi</label></div>
+                <div class="option-btn"><input type="radio" name="q12" id="q12_3" value="3"><label for="q12_3" data-val="3">3. Đôi khi</label></div>
+                <div class="option-btn"><input type="radio" name="q12" id="q12_4" value="4"><label for="q12_4" data-val="4">4. Thường xuyên</label></div>
+                <div class="option-btn"><input type="radio" name="q12" id="q12_5" value="5"><label for="q12_5" data-val="5">5. Rất chính xác</label></div>
+            </div>
+        </div>
+
+        <!-- PHẦN 4 -->
+        <div class="category-title"><span>Phần 4</span> Sự đồng cảm (Empathy)</div>
+        
+        <div class="question-card">
+            <div class="question-text">Câu 13: Khi dẫn khách đi xem nhà/đất, tôi dễ dàng 'đọc vị' được những lo lắng, ngần ngại đằng sau ngôn ngữ cơ thể của họ dù họ không nói ra bằng lời.</div>
+            <div class="options-group">
+                <div class="option-btn"><input type="radio" name="q13" id="q13_1" value="1"><label for="q13_1" data-val="1">1. Hoàn toàn không</label></div>
+                <div class="option-btn"><input type="radio" name="q13" id="q13_2" value="2"><label for="q13_2" data-val="2">2. Hiếm khi</label></div>
+                <div class="option-btn"><input type="radio" name="q13" id="q13_3" value="3"><label for="q13_3" data-val="3">3. Đôi khi</label></div>
+                <div class="option-btn"><input type="radio" name="q13" id="q13_4" value="4"><label for="q13_4" data-val="4">4. Thường xuyên</label></div>
+                <div class="option-btn"><input type="radio" name="q13" id="q13_5" value="5"><label for="q13_5" data-val="5">5. Rất chính xác</label></div>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-text">Câu 14: Tôi có khả năng dự đoán chính xác những nhu cầu và nỗi đau tiềm ẩn của khách hàng (tài chính, gia đình, phong thủy) để đưa ra giải pháp trước khi họ yêu cầu.</div>
+            <div class="options-group">
+                <div class="option-btn"><input type="radio" name="q14" id="q14_1" value="1"><label for="q14_1" data-val="1">1. Hoàn toàn không</label></div>
+                <div class="option-btn"><input type="radio" name="q14" id="q14_2" value="2"><label for="q14_2" data-val="2">2. Hiếm khi</label></div>
+                <div class="option-btn"><input type="radio" name="q14" id="q14_3" value="3"><label for="q14_3" data-val="3">3. Đôi khi</label></div>
+                <div class="option-btn"><input type="radio" name="q14" id="q14_4" value="4"><label for="q14_4" data-val="4">4. Thường xuyên</label></div>
+                <div class="option-btn"><input type="radio" name="q14" id="q14_5" value="5"><label for="q14_5" data-val="5">5. Rất chính xác</label></div>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-text">Câu 15: Tôi nhận diện nhanh chóng khi đồng nghiệp/nhân viên đang gặp khủng hoảng tâm lý hoặc chán nản vì rớt khách, từ đó có sự hỗ trợ kịp thời.</div>
+            <div class="options-group">
+                <div class="option-btn"><input type="radio" name="q15" id="q15_1" value="1"><label for="q15_1" data-val="1">1. Hoàn toàn không</label></div>
+                <div class="option-btn"><input type="radio" name="q15" id="q15_2" value="2"><label for="q15_2" data-val="2">2. Hiếm khi</label></div>
+                <div class="option-btn"><input type="radio" name="q15" id="q15_3" value="3"><label for="q15_3" data-val="3">3. Đôi khi</label></div>
+                <div class="option-btn"><input type="radio" name="q15" id="q15_4" value="4"><label for="q15_4" data-val="4">4. Thường xuyên</label></div>
+                <div class="option-btn"><input type="radio" name="q15" id="q15_5" value="5"><label for="q15_5" data-val="5">5. Rất chính xác</label></div>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-text">Câu 16: Trong các cuộc đàm phán 3 bên (Bán - Mua - Môi giới), tôi hiểu rõ động cơ cốt lõi và tâm lý phòng thủ của từng bên để gỡ rối và tìm ra điểm giao thoa lợi ích.</div>
+            <div class="options-group">
+                <div class="option-btn"><input type="radio" name="q16" id="q16_1" value="1"><label for="q16_1" data-val="1">1. Hoàn toàn không</label></div>
+                <div class="option-btn"><input type="radio" name="q16" id="q16_2" value="2"><label for="q16_2" data-val="2">2. Hiếm khi</label></div>
+                <div class="option-btn"><input type="radio" name="q16" id="q16_3" value="3"><label for="q16_3" data-val="3">3. Đôi khi</label></div>
+                <div class="option-btn"><input type="radio" name="q16" id="q16_4" value="4"><label for="q16_4" data-val="4">4. Thường xuyên</label></div>
+                <div class="option-btn"><input type="radio" name="q16" id="q16_5" value="5"><label for="q16_5" data-val="5">5. Rất chính xác</label></div>
+            </div>
+        </div>
+
+        <!-- PHẦN 5 -->
+        <div class="category-title"><span>Phần 5</span> Kỹ năng xã hội (Social skills)</div>
+        
+        <div class="question-card">
+            <div class="question-text">Câu 17: Tôi biết cách sử dụng ngôn từ, giọng điệu linh hoạt để điều hướng cảm xúc của khách hàng, thuyết phục họ ra quyết định 'xuống tiền' một cách tự nhiên.</div>
+            <div class="options-group">
+                <div class="option-btn"><input type="radio" name="q17" id="q17_1" value="1"><label for="q17_1" data-val="1">1. Hoàn toàn không</label></div>
+                <div class="option-btn"><input type="radio" name="q17" id="q17_2" value="2"><label for="q17_2" data-val="2">2. Hiếm khi</label></div>
+                <div class="option-btn"><input type="radio" name="q17" id="q17_3" value="3"><label for="q17_3" data-val="3">3. Đôi khi</label></div>
+                <div class="option-btn"><input type="radio" name="q17" id="q17_4" value="4"><label for="q17_4" data-val="4">4. Thường xuyên</label></div>
+                <div class="option-btn"><input type="radio" name="q17" id="q17_5" value="5"><label for="q17_5" data-val="5">5. Rất chính xác</label></div>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-text">Câu 18: Khi có xung đột gay gắt giữa người mua và người bán (bẻ cọc, thay đổi giá), tôi làm tốt vai trò trung gian đàm phán, xoa dịu căng thẳng và đưa ra giải pháp Win-Win.</div>
+            <div class="options-group">
+                <div class="option-btn"><input type="radio" name="q18" id="q18_1" value="1"><label for="q18_1" data-val="1">1. Hoàn toàn không</label></div>
+                <div class="option-btn"><input type="radio" name="q18" id="q18_2" value="2"><label for="q18_2" data-val="2">2. Hiếm khi</label></div>
+                <div class="option-btn"><input type="radio" name="q18" id="q18_3" value="3"><label for="q18_3" data-val="3">3. Đôi khi</label></div>
+                <div class="option-btn"><input type="radio" name="q18" id="q18_4" value="4"><label for="q18_4" data-val="4">4. Thường xuyên</label></div>
+                <div class="option-btn"><input type="radio" name="q18" id="q18_5" value="5"><label for="q18_5" data-val="5">5. Rất chính xác</label></div>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-text">Câu 19: Tôi có khả năng xây dựng và nuôi dưỡng một mạng lưới quan hệ sâu rộng, biến những khách hàng cũ thành 'đại sứ thương hiệu', tự nguyện giới thiệu khách mới.</div>
+            <div class="options-group">
+                <div class="option-btn"><input type="radio" name="q19" id="q19_1" value="1"><label for="q19_1" data-val="1">1. Hoàn toàn không</label></div>
+                <div class="option-btn"><input type="radio" name="q19" id="q19_2" value="2"><label for="q19_2" data-val="2">2. Hiếm khi</label></div>
+                <div class="option-btn"><input type="radio" name="q19" id="q19_3" value="3"><label for="q19_3" data-val="3">3. Đôi khi</label></div>
+                <div class="option-btn"><input type="radio" name="q19" id="q19_4" value="4"><label for="q19_4" data-val="4">4. Thường xuyên</label></div>
+                <div class="option-btn"><input type="radio" name="q19" id="q19_5" value="5"><label for="q19_5" data-val="5">5. Rất chính xác</label></div>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-text">Câu 20: Tôi biết cách khơi dậy thế mạnh của từng cá nhân, điều phối sự hợp tác chéo (Co-broker) để tạo ra sức mạnh tổng hợp thay vì cạnh tranh độc hại.</div>
+            <div class="options-group">
+                <div class="option-btn"><input type="radio" name="q20" id="q20_1" value="1"><label for="q20_1" data-val="1">1. Hoàn toàn không</label></div>
+                <div class="option-btn"><input type="radio" name="q20" id="q20_2" value="2"><label for="q20_2" data-val="2">2. Hiếm khi</label></div>
+                <div class="option-btn"><input type="radio" name="q20" id="q20_3" value="3"><label for="q20_3" data-val="3">3. Đôi khi</label></div>
+                <div class="option-btn"><input type="radio" name="q20" id="q20_4" value="4"><label for="q20_4" data-val="4">4. Thường xuyên</label></div>
+                <div class="option-btn"><input type="radio" name="q20" id="q20_5" value="5"><label for="q20_5" data-val="5">5. Rất chính xác</label></div>
+            </div>
+        </div>
         
         <div id="error-msg" class="error-msg">⚠️ Vui lòng trả lời đầy đủ 20 câu hỏi trước khi phân tích kết quả!</div>
-        <button type="submit" class="submit-btn">Phân Tích Báo Cáo Năng Lực</button>
+        <button type="submit" class="submit-btn">Phân Tích Báo Cáo Năng Lực EQ</button>
     </form>
 
     <div id="result-section">
@@ -199,49 +424,106 @@
         <div class="component-analysis">
             <h3 style="margin-bottom: 25px; color: var(--primary); border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">Phân Tích 5 Năng Lực Thành Phần (Tối đa: 20 điểm/phần)</h3>
             <div id="components-container">
-                <!-- Biểu đồ điểm thành phần sẽ được đổ vào đây -->
+                <!-- Biểu đồ điểm thành phần -->
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // Đảm bảo toàn bộ HTML đã load xong mới chạy mã JS
-    document.addEventListener("DOMContentLoaded", function() {
-        
-        const eqData = [
-            { category: "Tự nhận thức (Self-awareness)", questions: [
-                "Khi để vuột mất một giao dịch lớn hoặc bị khách hàng hủy cọc, tôi lập tức nhận diện được cảm xúc tiêu cực của mình và biết rõ nó sẽ ảnh hưởng thế nào đến cách tôi làm việc.",
-                "Tôi nắm rõ các 'điểm mù' (điểm yếu) trong kỹ năng tư vấn hay chốt sale của mình và không ngại thừa nhận chúng để tìm cách cải thiện.",
-                "Tôi có sự tự tin vững chắc vào giá trị và chuyên môn của mình, không bị dao động nghiêm trọng ngay cả khi bị khách hàng hoặc đối tác từ chối phũ phàng.",
-                "Ngay giữa một cuộc đàm phán giá cả căng thẳng, tôi vẫn nhận thức rõ nhịp tim, sự thay đổi giọng nói và những cảm xúc đang nảy sinh bên trong mình."
-            ]},
-            { category: "Tự điều chỉnh (Self-regulation)", questions: [
-                "Khi thị trường bất động sản biến động xấu hoặc công ty thay đổi chính sách, tôi nhanh chóng lấy lại bình tĩnh, linh hoạt điều chỉnh chiến lược thay vì hoang mang, phàn nàn.",
-                "Khi khách hàng tỏ ra vô lý, trịch thượng hoặc nổi giận, tôi có khả năng kìm nén phản xạ 'phòng thủ/cãi lại' để duy trì phong thái chuyên nghiệp và lắng nghe họ.",
-                "Đứng trước áp lực doanh số khắc nghiệt, tôi vẫn kiên quyết từ chối thực hiện những giao dịch lừa dối khách hàng hoặc vi phạm đạo đức nghề nghiệp.",
-                "Tôi có các kỹ thuật cá nhân (thở sâu, thay đổi góc nhìn) để nhanh chóng 'F5' bản thân, thoát khỏi sự thất vọng khi một hợp đồng chắc chắn lại bị hủy phút chót."
-            ]},
-            { category: "Động lực (Motivation)", questions: [
-                "Sự từ chối liên tục từ khách hàng không làm tôi mất đi sự nhiệt huyết; trái lại, nó thôi thúc tôi tìm ra cách tiếp cận thông minh hơn.",
-                "Mục tiêu sâu xa của tôi không chỉ là chốt deal để lấy hoa hồng, mà là cảm giác chinh phục thử thách khó và mang lại giá trị thực sự cho khách hàng.",
-                "Dù thị trường đóng băng hay ảm đạm, tôi vẫn kiên trì theo đuổi các chỉ tiêu công việc hàng ngày mà không cần cấp trên thúc giục.",
-                "Khi thấy một cơ hội bán hàng chớp nhoáng (ví dụ: căn nhà giá ngộp), tôi sẵn sàng dốc toàn lực hành động ngay lập tức thay vì chần chừ đợi chỉ đạo."
-            ]},
-            { category: "Sự đồng cảm (Empathy)", questions: [
-                "Khi dẫn khách đi xem nhà/đất, tôi dễ dàng 'đọc vị' được những lo lắng, ngần ngại đằng sau ngôn ngữ cơ thể của họ dù họ không nói ra bằng lời.",
-                "Tôi có khả năng dự đoán chính xác những nhu cầu và nỗi đau tiềm ẩn của khách hàng (tài chính, gia đình, phong thủy) để đưa ra giải pháp trước khi họ yêu cầu.",
-                "Tôi nhận diện nhanh chóng khi đồng nghiệp/nhân viên đang gặp khủng hoảng tâm lý hoặc chán nản vì rớt khách, từ đó có sự hỗ trợ kịp thời.",
-                "Trong các cuộc đàm phán 3 bên (Bán - Mua - Môi giới), tôi hiểu rõ động cơ cốt lõi và tâm lý phòng thủ của từng bên để gỡ rối và tìm ra điểm giao thoa lợi ích."
-            ]},
-            { category: "Kỹ năng xã hội (Social skills)", questions: [
-                "Tôi biết cách sử dụng ngôn từ, giọng điệu linh hoạt để điều hướng cảm xúc của khách hàng, thuyết phục họ ra quyết định 'xuống tiền' một cách tự nhiên.",
-                "Khi có xung đột gay gắt giữa người mua và người bán (bẻ cọc, thay đổi giá), tôi làm tốt vai trò trung gian đàm phán, xoa dịu căng thẳng và đưa ra giải pháp Win-Win.",
-                "Tôi có khả năng xây dựng và nuôi dưỡng một mạng lưới quan hệ sâu rộng, biến những khách hàng cũ thành 'đại sứ thương hiệu', tự nguyện giới thiệu khách mới.",
-                "Tôi biết cách khơi dậy thế mạnh của từng cá nhân, điều phối sự hợp tác chéo (Co-broker) để tạo ra sức mạnh tổng hợp thay vì cạnh tranh độc hại."
-            ]}
-        ];
+    const categories = [
+        "Tự nhận thức (Self-awareness)",
+        "Tự điều chỉnh (Self-regulation)",
+        "Động lực (Motivation)",
+        "Sự đồng cảm (Empathy)",
+        "Kỹ năng xã hội (Social skills)"
+    ];
 
-        const evaluations = [
-            { min: 85, max: 100, title: "CHUYÊN GIA / NHÀ QUẢN LÝ XUẤT SẮC (Top 5%)", color: "var(--success)", 
-              desc: "<strong>Nhận định:</strong> Bạn sở hữu EQ cực kỳ cao, là
+    const evaluations = [
+        { min: 85, max: 100, title: "CHUYÊN GIA / NHÀ QUẢN LÝ XUẤT SẮC (Top 5%)", color: "var(--success)", 
+          desc: "<strong>Nhận định:</strong> Bạn sở hữu EQ cực kỳ cao, là tố chất của một 'Top Biller' hoặc Giám đốc sàn giao dịch xuất sắc. Bạn có khả năng thao lược, quản trị rủi ro cảm xúc tuyệt vời.<br><br><strong>Đặc trưng:</strong> Khách hàng coi bạn là 'Cố vấn tin cậy' (Trusted Advisor). Trong vai trò quản lý, bạn là nhà lãnh đạo giữ lửa xuất sắc cho tổ chức vượt qua những giai đoạn khó khăn nhất của thị trường." },
+        { min: 65, max: 84, title: "NHÂN SỰ CHUYÊN NGHIỆP & CÓ THỰC LỰC", color: "var(--primary)", 
+          desc: "<strong>Nhận định:</strong> Trí tuệ cảm xúc của bạn ở mức Khá - Tốt. Bạn biết cách kiểm soát các giao dịch khó và chịu được áp lực của nghề môi giới.<br><br><strong>Khuyến nghị:</strong> Hãy xem xét điểm thành phần. Nếu điểm 'Sự đồng cảm' hoặc 'Kỹ năng xã hội' chưa tối đa, hãy rèn luyện kỹ năng đặt câu hỏi sâu (Deep Questioning) để khai thác triệt để 'nỗi đau' của khách hàng phân khúc cao cấp." },
+        { min: 45, max: 64, title: "NHÂN SỰ CẦN HUẤN LUYỆN THÊM (Rủi ro cao)", color: "var(--warning)", 
+          desc: "<strong>Nhận định:</strong> Bạn dễ bị ảnh hưởng bởi sự từ chối, dễ nổi nóng hoặc nản chí khi thị trường đi xuống. Khả năng đọc vị khách hàng chỉ đang ở bề nổi.<br><br><strong>Khuyến nghị:</strong> Cần tập trung cải thiện nhóm <i>Tự điều chỉnh</i> và <i>Động lực</i>. Hãy tham gia các khóa huấn luyện về 'Quản trị cảm xúc trong đàm phán' và học cách nhìn nhận sự từ chối như một phần của phễu bán hàng (Sales Funnel)." },
+        { min: 0, max: 44, title: "KHÔNG PHÙ HỢP VỚI BÁN HÀNG CẤP CAO", color: "var(--danger)", 
+          desc: "<strong>Nhận định:</strong> Hiện tại, cảm xúc đang chi phối hoàn toàn công việc của bạn. Bạn thiếu kiên nhẫn, dễ xung đột và dễ bỏ cuộc. Đối với vai trò quản lý, mức điểm này cảnh báo sự đứt gãy nghiêm trọng trong việc gắn kết nhân sự trên sàn." }
+    ];
+
+    document.getElementById('eq-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        let totalScore = 0;
+        let compScores = [0, 0, 0, 0, 0];
+        let isComplete = true;
+
+        for(let i = 1; i <= 20; i++) {
+            const selected = document.querySelector(`input[name="q${i}"]:checked`);
+            if(!selected) {
+                isComplete = false;
+                break;
+            }
+            let val = parseInt(selected.value);
+            totalScore += val;
+            
+            // Chia điểm vào 5 nhóm
+            let compIdx = Math.floor((i - 1) / 4);
+            compScores[compIdx] += val;
+        }
+
+        const errorMsg = document.getElementById('error-msg');
+        if(!isComplete) {
+            errorMsg.style.display = 'block';
+            return;
+        } else {
+            errorMsg.style.display = 'none';
+        }
+
+        // Hiển thị kết quả
+        document.getElementById('result-section').style.display = 'block';
+        document.getElementById('total-score').innerText = totalScore;
+        
+        let evalData = evaluations.find(e => totalScore >= e.min && totalScore <= e.max);
+        const titleEl = document.getElementById('eval-title');
+        titleEl.innerText = evalData.title;
+        titleEl.style.color = evalData.color;
+        document.getElementById('eval-desc').innerHTML = evalData.desc;
+
+        const compContainer = document.getElementById('components-container');
+        let compHtml = "";
+
+        categories.forEach((catName, idx) => {
+            let score = compScores[idx];
+            let percent = (score / 20) * 100;
+            
+            let color = 'var(--primary)';
+            if(score < 10) color = 'var(--danger)';
+            else if(score < 15) color = 'var(--warning)';
+            else if(score >= 18) color = 'var(--success)';
+
+            compHtml += `
+                <div class="component-row">
+                    <div class="comp-header">
+                        <span>${catName}</span>
+                        <span style="color: ${color}">${score} / 20</span>
+                    </div>
+                    <div class="comp-bar-bg">
+                        <div class="comp-bar-fill" style="width: 0%; background: ${color}" data-target="${percent}"></div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        compContainer.innerHTML = compHtml;
+
+        setTimeout(() => {
+            document.querySelectorAll('.comp-bar-fill').forEach(bar => {
+                bar.style.width = bar.getAttribute('data-target') + '%';
+            });
+            document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+    });
+</script>
+
+</body>
+</html>
