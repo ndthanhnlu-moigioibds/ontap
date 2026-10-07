@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Đánh Giá Trí Tuệ Cảm Xúc (EQ) - Bất Động Sản</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #0f172a;      
+            --primary-light: #1e293b;
+            --accent: #d97706;       
+            --accent-hover: #b45309;
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-main: #334155;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --success: #16a34a;
+            --warning: #ca8a04;
+            --danger: #dc2626;
+            --radius: 12px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 30px 15px;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: var(--primary);
+            color: white;
+            padding: 40px 20px;
+            border-radius: var(--radius);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15);
+        }
+
+        .header h1 { font-size: 26px; font-weight: 700; margin-bottom: 10px; color: white; }
+        .header p { color: #cbd5e1; font-size: 15px; max-width: 700px; margin: 0 auto; }
+
+        .instruction-card {
+            background: var(--card-bg);
+            border-left: 4px solid var(--accent);
+            padding: 20px 25px;
+            border-radius: var(--radius);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            font-size: 15px;
+        }
+
+        .category-title {
+            font-size: 19px;
+            color: var(--primary);
+            margin: 35px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        .category-title span {
+            background: var(--accent);
+            color: white;
+            font-size: 13px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: var(--radius);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .question-card:hover { border-color: #94a3b8; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05); }
+
+        .question-text { font-weight: 600; font-size: 16px; margin-bottom: 20px; color: var(--primary); }
+
+        .options-group { display: flex; justify-content: space-between; gap: 10px; }
+
+        .option-btn { flex: 1; position: relative; }
+        .option-btn input[type="radio"] { display: none; }
+        
+        .option-btn label {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: #f8fafc; border: 2px solid var(--border-color); border-radius: 8px;
+            padding: 12px 5px; cursor: pointer; font-size: 13px; font-weight: 500;
+            color: var(--text-muted); text-align: center; transition: all 0.2s; height: 100%;
+        }
+
+        .option-btn label:hover { background: #f1f5f9; border-color: #cbd5e1; }
+        .option-btn input[type="radio"]:checked + label {
+            background: var(--primary); border-color: var(--primary); color: white;
+            box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.2);
+        }
+
+        .submit-btn {
+            display: block; width: 100%; background: var(--accent); color: white; border: none;
+            padding: 18px; font-size: 18px; font-weight: 700; border-radius: var(--radius);
+            cursor: pointer; transition: all 0.3s; margin-top: 40px;
+            box-shadow: 0 4px 6px -1px rgba(217, 119, 6, 0.3);
+        }
+
+        .submit-btn:hover { background: var(--accent-hover); transform: translateY(-2px); }
+
+        .error-msg {
+            background: #fee2e2; color: var(--danger); padding: 15px; border-radius: 8px;
+            font-weight: 600; text-align: center; margin-top: 20px; display: none; border: 1px solid #f87171;
+        }
+
+        /* Result Section */
+        #result-section { display: none; margin-top: 50px; animation: fadeIn 0.6s ease-out; }
+        
+        .score-dashboard { display: flex; gap: 20px; margin-bottom: 30px; }
+        
+        .total-score-card {
+            flex: 1; background: var(--primary); color: white; padding: 30px;
+            border-radius: var(--radius); text-align: center; display: flex;
+            flex-direction: column; justify-content: center;
+        }
+
+        .total-score-card .score-number { font-size: 64px; font-weight: 700; color: var(--accent); line-height: 1; margin: 10px 0; }
+        
+        .evaluation-card { flex: 2; background: var(--card-bg); padding: 30px; border-radius: var(--radius); border: 1px solid var(--border-color); }
+        .eval-title { font-size: 22px; font-weight: 700; margin-bottom: 15px; }
+        .eval-desc { color: var(--text-main); font-size: 15px; }
+
+        .component-analysis { background: var(--card-bg); padding: 30px; border-radius: var(--radius); border: 1px solid var(--border-color); margin-top: 20px; }
+        .component-row { margin-bottom: 20px; }
+        .comp-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-weight: 600; font-size: 14px; }
+        .comp-bar-bg { width: 100%; height: 12px; background: #e2e8f0; border-radius: 10px; overflow: hidden; }
+        .comp-bar-fill { height: 100%; background: var(--primary); width: 0; border-radius: 10px; transition: width 1.5s ease-out; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 768px) {
+            .options-group { flex-direction: column; }
+            .option-btn label { padding: 15px; flex-direction: row; justify-content: flex-start; gap: 10px; }
+            .option-btn label::before {
+                content: attr(data-val); background: var(--border-color); color: var(--text-main);
+                width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;
+            }
+            .option-btn input[type="radio"]:checked + label::before { background: white; color: var(--primary); }
+            .score-dashboard { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Đánh Giá Trí Tuệ Cảm Xúc (EQ) Bất Động Sản</h1>
+        <p>Phân tích năng lực trí tuệ cảm xúc dựa trên mô hình 5 thành phần của Tiến sĩ Daniel Goleman, được tinh chỉnh dành riêng cho Chuyên gia môi giới và Quản lý sàn giao dịch.</p>
+    </div>
+
+    <div class="instruction-card">
+        <strong>📌 Hướng dẫn thực hiện:</strong> Đánh giá mức độ chính xác của từng nhận định đối với bạn trong công việc thực tế (Thang điểm 1-5).<br><br>
+        <i>1 = Hoàn toàn không đúng &nbsp;|&nbsp; 3 = Đôi khi đúng &nbsp;|&nbsp; 5 = Hoàn toàn chính xác</i>
+    </div>
+
+    <form id="eq-form">
+        <!-- Khu vực chứa câu hỏi sẽ được JavaScript đổ dữ liệu vào đây -->
+        <div id="quiz-container"></div>
+        
+        <div id="error-msg" class="error-msg">⚠️ Vui lòng trả lời đầy đủ 20 câu hỏi trước khi phân tích kết quả!</div>
+        <button type="submit" class="submit-btn">Phân Tích Báo Cáo Năng Lực</button>
+    </form>
+
+    <div id="result-section">
+        <div class="score-dashboard">
+            <div class="total-score-card">
+                <div>Tổng Điểm EQ</div>
+                <div class="score-number" id="total-score">0</div>
+                <div>/ 100</div>
+            </div>
+            <div class="evaluation-card">
+                <div class="eval-title" id="eval-title">Đang phân tích...</div>
+                <div class="eval-desc" id="eval-desc"></div>
+            </div>
+        </div>
+
+        <div class="component-analysis">
+            <h3 style="margin-bottom: 25px; color: var(--primary); border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">Phân Tích 5 Năng Lực Thành Phần (Tối đa: 20 điểm/phần)</h3>
+            <div id="components-container">
+                <!-- Biểu đồ điểm thành phần sẽ được đổ vào đây -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Đảm bảo toàn bộ HTML đã load xong mới chạy mã JS
+    document.addEventListener("DOMContentLoaded", function() {
+        
+        const eqData = [
+            { category: "Tự nhận thức (Self-awareness)", questions: [
+                "Khi để vuột mất một giao dịch lớn hoặc bị khách hàng hủy cọc, tôi lập tức nhận diện được cảm xúc tiêu cực của mình và biết rõ nó sẽ ảnh hưởng thế nào đến cách tôi làm việc.",
+                "Tôi nắm rõ các 'điểm mù' (điểm yếu) trong kỹ năng tư vấn hay chốt sale của mình và không ngại thừa nhận chúng để tìm cách cải thiện.",
+                "Tôi có sự tự tin vững chắc vào giá trị và chuyên môn của mình, không bị dao động nghiêm trọng ngay cả khi bị khách hàng hoặc đối tác từ chối phũ phàng.",
+                "Ngay giữa một cuộc đàm phán giá cả căng thẳng, tôi vẫn nhận thức rõ nhịp tim, sự thay đổi giọng nói và những cảm xúc đang nảy sinh bên trong mình."
+            ]},
+            { category: "Tự điều chỉnh (Self-regulation)", questions: [
+                "Khi thị trường bất động sản biến động xấu hoặc công ty thay đổi chính sách, tôi nhanh chóng lấy lại bình tĩnh, linh hoạt điều chỉnh chiến lược thay vì hoang mang, phàn nàn.",
+                "Khi khách hàng tỏ ra vô lý, trịch thượng hoặc nổi giận, tôi có khả năng kìm nén phản xạ 'phòng thủ/cãi lại' để duy trì phong thái chuyên nghiệp và lắng nghe họ.",
+                "Đứng trước áp lực doanh số khắc nghiệt, tôi vẫn kiên quyết từ chối thực hiện những giao dịch lừa dối khách hàng hoặc vi phạm đạo đức nghề nghiệp.",
+                "Tôi có các kỹ thuật cá nhân (thở sâu, thay đổi góc nhìn) để nhanh chóng 'F5' bản thân, thoát khỏi sự thất vọng khi một hợp đồng chắc chắn lại bị hủy phút chót."
+            ]},
+            { category: "Động lực (Motivation)", questions: [
+                "Sự từ chối liên tục từ khách hàng không làm tôi mất đi sự nhiệt huyết; trái lại, nó thôi thúc tôi tìm ra cách tiếp cận thông minh hơn.",
+                "Mục tiêu sâu xa của tôi không chỉ là chốt deal để lấy hoa hồng, mà là cảm giác chinh phục thử thách khó và mang lại giá trị thực sự cho khách hàng.",
+                "Dù thị trường đóng băng hay ảm đạm, tôi vẫn kiên trì theo đuổi các chỉ tiêu công việc hàng ngày mà không cần cấp trên thúc giục.",
+                "Khi thấy một cơ hội bán hàng chớp nhoáng (ví dụ: căn nhà giá ngộp), tôi sẵn sàng dốc toàn lực hành động ngay lập tức thay vì chần chừ đợi chỉ đạo."
+            ]},
+            { category: "Sự đồng cảm (Empathy)", questions: [
+                "Khi dẫn khách đi xem nhà/đất, tôi dễ dàng 'đọc vị' được những lo lắng, ngần ngại đằng sau ngôn ngữ cơ thể của họ dù họ không nói ra bằng lời.",
+                "Tôi có khả năng dự đoán chính xác những nhu cầu và nỗi đau tiềm ẩn của khách hàng (tài chính, gia đình, phong thủy) để đưa ra giải pháp trước khi họ yêu cầu.",
+                "Tôi nhận diện nhanh chóng khi đồng nghiệp/nhân viên đang gặp khủng hoảng tâm lý hoặc chán nản vì rớt khách, từ đó có sự hỗ trợ kịp thời.",
+                "Trong các cuộc đàm phán 3 bên (Bán - Mua - Môi giới), tôi hiểu rõ động cơ cốt lõi và tâm lý phòng thủ của từng bên để gỡ rối và tìm ra điểm giao thoa lợi ích."
+            ]},
+            { category: "Kỹ năng xã hội (Social skills)", questions: [
+                "Tôi biết cách sử dụng ngôn từ, giọng điệu linh hoạt để điều hướng cảm xúc của khách hàng, thuyết phục họ ra quyết định 'xuống tiền' một cách tự nhiên.",
+                "Khi có xung đột gay gắt giữa người mua và người bán (bẻ cọc, thay đổi giá), tôi làm tốt vai trò trung gian đàm phán, xoa dịu căng thẳng và đưa ra giải pháp Win-Win.",
+                "Tôi có khả năng xây dựng và nuôi dưỡng một mạng lưới quan hệ sâu rộng, biến những khách hàng cũ thành 'đại sứ thương hiệu', tự nguyện giới thiệu khách mới.",
+                "Tôi biết cách khơi dậy thế mạnh của từng cá nhân, điều phối sự hợp tác chéo (Co-broker) để tạo ra sức mạnh tổng hợp thay vì cạnh tranh độc hại."
+            ]}
+        ];
+
+        const evaluations = [
+            { min: 85, max: 100, title: "CHUYÊN GIA / NHÀ QUẢN LÝ XUẤT SẮC (Top 5%)", color: "var(--success)", 
+              desc: "<strong>Nhận định:</strong> Bạn sở hữu EQ cực kỳ cao, là
